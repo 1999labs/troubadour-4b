@@ -32,7 +32,7 @@ Evaluation sets are deliberately class-balanced, not representative of a natural
 
 ## Fields and safe use
 
-`messages` contains the system instruction, public observations/query, and target assistant label. `answer`, `observations`, `query`, `society_pair`, `rule_mask`, `family`, `consistent_rules`, and `k` support auditing. Hidden `rule_mask` and metadata must NEVER be included in the tested model's prompt. The benchmark runner constructs inputs from observations/query only; the published answer is used solely for checking.
+`messages` contains the system instruction, public observations/query, and target assistant label. `answer`, `observations`, `query`, `society_pair`, `rule_mask`, `family`, `consistent_rules`, and `k` support auditing. `contrast_group` identifies paired queries sharing observations in the stress split and is null in the other splits. All splits share one Arrow schema so they load together. Hidden `rule_mask` and metadata must NEVER be included in the tested model's prompt. The benchmark runner constructs inputs from observations/query only; the published answer is used solely for checking.
 
 All prose is rendered from deterministic templates. No external model or human cultural judgments generated the labels. The final test is generated only after model selection is frozen; the public release makes it available for independent reproduction. Once public, a new model could train on it, so future claims should disclose contamination and use fresh held-out rules where possible.
 

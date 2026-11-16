@@ -18,14 +18,13 @@ def main():
     files={'train':'train_episodes','train_choice':'choice_episodes','validation':'dev','validation_transfer':'dev_transfer','test':'final','test_transfer':'final_transfer','validation_contrast':'dev_contrast','test_contrast':'final_contrast'}
     for f in files.values():
         if not Path('data',f+'.jsonl').exists():raise SystemExit('Missing dataset split '+f)
-    from datasets import Dataset
+    from .dataset_export import to_hf_dataset
     stage=Path('release');dataset=stage/'dataset';model=stage/'model'
     for folder in (dataset/'data',model/'adapter'):folder.mkdir(parents=True,exist_ok=True)
     stats={}
     for split,filename in files.items():
         rows=[json.loads(l) for l in Path('data',filename+'.jsonl').read_text().splitlines()]
-        for row in rows:row['messages']=messages(row)
-        Dataset.from_list(rows).to_parquet(str(dataset/'data'/f'{split}.parquet'))
+        to_hf_dataset(rows).to_parquet(str(dataset/'data'/f'{split}.parquet'))
         stats[split]=len(rows)
     card=Path('DATASET_CARD.md').read_text()
     config='configs:\n- config_name: default\n  data_files:\n'+''.join(f'  - split: {s}\n    path: data/{s}.parquet\n' for s in files)
