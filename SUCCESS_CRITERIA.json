@@ -1,0 +1,17 @@
+{
+  "primary": "constrained-choice A/B/U accuracy at 8 observations on reserved IID society pairs",
+  "minimum_raw_qwen_gain": 0.1,
+  "paired_cluster_bootstrap_lower_bound_must_exceed": 0,
+  "minimum_answerable_gain": 0.1,
+  "maximum_uncertainty_recall_drop": 0.1,
+  "minimum_gain_over_dev_calibrated_qwen": 0.05,
+  "transfer_gain_must_be_positive": true,
+  "replicate_seeds": [
+    17,
+    29,
+    43
+  ],
+  "published_seed_preselected": 17,
+  "heuristic_comparison": "Report explicitly; do not claim best method if the nearest-example heuristic is stronger",
+  "status": "Frozen after base pilot, before candidate development results or final generation"
+}

@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+artifacts/
+runs/
+data/
+*.safetensors
+.env
+*.egg-info/
+release/

@@ -1,0 +1,17 @@
+Troubadour-4B / Troubadour / Troubadour-Bench
+
+Original project code, original synthetic data, and original adapter weights are
+released under the Apache License, Version 2.0. See LICENSE.
+
+The model builds on Qwen/Qwen3-4B-Instruct-2507, distributed by the Qwen team under
+Apache-2.0, using the mlx-community/Qwen3-4B-Instruct-2507-4bit conversion at revision
+50d427756c6b1b2fe0c0a10f67fbda1fc8e82c1b. Upstream model ownership and attribution
+are retained. The adapter release does not claim ownership of the base weights.
+
+Runtime dependencies include MLX and MLX-LM (ml-explore), Hugging Face libraries,
+NumPy, Matplotlib, and Gradio. Their own licenses apply to their distributions;
+this project does not relicense those dependencies. Exact versions are recorded
+in requirements.lock.
+
+The dataset contains invented, programmatically generated situations and labels.
+It contains no records of real participants and does not represent real cultures.

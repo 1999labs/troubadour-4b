@@ -1,0 +1,25 @@
+[project]
+name = "troubadour-bench"
+version = "0.1.0"
+description = "Learning unfamiliar conventions from evidence"
+requires-python = ">=3.11"
+dependencies = ["numpy", "huggingface_hub", "datasets"]
+[project.optional-dependencies]
+mac = ["mlx-lm[train]"]
+dev = ["pytest", "matplotlib", "gradio"]
+[tool.pytest.ini_options]
+pythonpath = ["."]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["troubadour*"]
+
+[tool.setuptools.package-data]
+troubadour = ["*.jinja"]
+
+[project.scripts]
+troubadour-bench = "troubadour.evaluate_batch:main"
+troubadour-predict = "troubadour.predict:main"
