@@ -36,6 +36,7 @@ def main():
         shutil.copy2('LICENSE',dest/'LICENSE')
         shutil.copy2('NOTICE',dest/'NOTICE')
         shutil.copy2('RESEARCH_PLAN.md',dest/'RESEARCH_PLAN.md')
+        shutil.copy2('EXPERIMENT_LOG.md',dest/'EXPERIMENT_LOG.md')
         shutil.copy2('artifacts/selection.json',dest/'selection.json')
         shutil.copy2('data/split_manifest.json',dest/'split_manifest.json')
         shutil.copy2('SUCCESS_CRITERIA.json',dest/'SUCCESS_CRITERIA.json')
@@ -52,8 +53,10 @@ def main():
     example=json.loads(Path('data/dev.jsonl').read_text().splitlines()[2])
     (model/'example_episode.json').write_text(json.dumps({k:example[k] for k in ['observations','query']},indent=2))
     (model/'requirements.txt').write_text('mlx-lm==0.32.2\nhuggingface-hub==2.4.0\n')
+    from .release_integrity import write_manifest
+    for folder in (dataset,model):write_manifest(folder)
     integrity={str(p.relative_to(stage)):hashlib.sha256(p.read_bytes()).hexdigest() for folder in (dataset,model) for p in folder.rglob('*') if p.is_file()}
     (stage/'integrity.json').write_text(json.dumps(integrity,indent=2))
-    print('Staged dataset/model files. Write and review model README, then verify fresh loading before publishing.')
+    print('Staged dataset/model files. Write and review model README, refresh each folder SHA256SUMS with release_integrity --write, then verify fresh loading before publishing.')
 
 if __name__=='__main__':main()
