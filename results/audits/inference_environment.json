@@ -1,7 +1,6 @@
 {
   "python": "3.12.15",
   "packages": {
-    "troubadour-bench": "0.1.0",
     "shellingham": "1.5.4",
     "markdown-it-py": "4.3.0",
     "mlx": "0.32.4",
@@ -47,5 +46,9 @@
   ],
   "constraints_sha256": "55c1d32c98b026bc9b6d35deba8962768af6906bf5b2feff5605f18d0928fd71",
   "installation": "New minimal virtual environment; resolved and installed with uv against the published constraints",
-  "model_inference": "Pending final public release verification"
+  "model_inference": "Passed using fresh anonymous model download and downloaded source",
+  "troubadour_available_outside_checkout": false,
+  "inventory_note": "Package inventory measured outside the project checkout, excluding checkout-local egg-info metadata.",
+  "verified_model_revision": "a1a9911fe723a2da6a40cec6786fe80b296653b8",
+  "probability_max_error_vs_selected_development": 0.0
 }

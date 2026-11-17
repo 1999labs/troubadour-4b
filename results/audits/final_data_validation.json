@@ -1,0 +1,107 @@
+{
+  "splits": {
+    "train_episodes": {
+      "rows": 5502,
+      "unique_ids": 5502,
+      "duplicate_prompts": 0,
+      "labels": {
+        "U": 2922,
+        "B": 1290,
+        "A": 1290
+      },
+      "sha256": "7d5cb28ba8c4a684cdeccca00451d0e9fd93a5c3bc9c434a4524bbe54c219724"
+    },
+    "choice_episodes": {
+      "rows": 2850,
+      "unique_ids": 2850,
+      "duplicate_prompts": 0,
+      "labels": {
+        "A": 950,
+        "U": 950,
+        "B": 950
+      },
+      "sha256": "1ef15bd895818f0257241c25196d3dc6afcc35ce52e5088ae5ece852afc52646"
+    },
+    "counterfactual_episodes": {
+      "rows": 3690,
+      "unique_ids": 3690,
+      "duplicate_prompts": 0,
+      "labels": {
+        "A": 1230,
+        "B": 1230,
+        "U": 1230
+      },
+      "sha256": "dbce95ce663017db7fec978e6fbf44464d0ea093fccd00bbf37c3b478abcb4b4"
+    },
+    "dev": {
+      "rows": 240,
+      "unique_ids": 240,
+      "duplicate_prompts": 0,
+      "labels": {
+        "U": 80,
+        "B": 80,
+        "A": 80
+      },
+      "sha256": "f0f54f7c748c0280d0e62f9f98e4ed79149a8e4bced9f8c65f14f25360d167cf"
+    },
+    "dev_transfer": {
+      "rows": 150,
+      "unique_ids": 150,
+      "duplicate_prompts": 0,
+      "labels": {
+        "U": 50,
+        "B": 50,
+        "A": 50
+      },
+      "sha256": "67f5d880b0261efed15cafb8bd5f0e69dd3452ea93f17dd1ee2ec60c200d4ae3"
+    },
+    "dev_contrast": {
+      "rows": 160,
+      "unique_ids": 160,
+      "duplicate_prompts": 0,
+      "labels": {
+        "A": 80,
+        "B": 80
+      },
+      "sha256": "a24b9607d76f38953f1b6e817b91ad08016a484cf9758f7e612482e2a701f194"
+    },
+    "final": {
+      "rows": 306,
+      "unique_ids": 306,
+      "duplicate_prompts": 0,
+      "labels": {
+        "U": 102,
+        "A": 102,
+        "B": 102
+      },
+      "sha256": "ef71dd62a4634462ec759f94b8cdf9466539a75f925ba740fb0f998b51486327"
+    },
+    "final_transfer": {
+      "rows": 150,
+      "unique_ids": 150,
+      "duplicate_prompts": 0,
+      "labels": {
+        "U": 50,
+        "A": 50,
+        "B": 50
+      },
+      "sha256": "a8589d5afec744ac38ff3c0ae8856de6f4c166e9d60bbcbb1a9041f18950364e"
+    },
+    "final_contrast": {
+      "rows": 204,
+      "unique_ids": 204,
+      "duplicate_prompts": 0,
+      "labels": {
+        "A": 102,
+        "B": 102
+      },
+      "sha256": "2abf5e3053f4855ae77b4155eea965ff4826642e4553aa250e922397a7d67771"
+    }
+  },
+  "overlapping_training_views_or_same_allocation": {
+    "train_episodes / choice_episodes": 2850,
+    "train_episodes / counterfactual_episodes": 738,
+    "choice_episodes / counterfactual_episodes": 738
+  },
+  "final_generated": true
+}

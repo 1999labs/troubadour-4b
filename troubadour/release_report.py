@@ -35,19 +35,28 @@ def render(result, curves, robustness, smoke):
         text+=f"| {name} | {r['base']['n']} | {percent(r['base']['accuracy'])} | {percent(r['candidate']['accuracy'])} | {100*r['cluster_mean_gain']:+.1f} [{100*low:+.1f}, {100*high:+.1f}] points |\n"
     stress=result['opposite_query_stress']
     text+=f"\nOn the stress test, getting both opposite queries right occurs for {percent(stress['base']['contrast_both_queries_correct'])} of query pairs for Qwen and {percent(stress['candidate']['contrast_both_queries_correct'])} for Troubadour. These pairs share observations and require different answers, so observation-only guesses cannot solve both. This is a selected stress distribution, not the same distribution as the primary test.\n\n"
+    text+=f"On this stress distribution, conditional A/B accuracy is {percent(stress['base']['conditional_AB_accuracy'])} for Qwen and {percent(stress['candidate']['conditional_AB_accuracy'])} for Troubadour when U is ignored. This comparison helps distinguish fewer abstentions from better A/B ordering; a large joint-accuracy gain alone is insufficient evidence of improved query reasoning.\n\n"
     text+='## Calibration diagnostics\n\n'
     cal=result['secondary_both_dev_calibrated']['primary'];bias=result['calibration_biases']
     text+=f"The U-logit biases fitted on development data were {bias['base']:+.2f} for Qwen and {bias['candidate']:+.2f} for the selected adapter. Applied unchanged to the final test, the adjusted accuracies are {percent(cal['base']['accuracy'])} and {percent(cal['candidate']['accuracy'])}. These are secondary comparisons; the deployed predictor uses the unadjusted model.\n\n"
     text+=f"When U is ignored solely to compare the relative A/B scores on answerable questions, accuracy is {percent(b['conditional_AB_accuracy'])} for Qwen and {percent(c['conditional_AB_accuracy'])} for Troubadour. U-versus-best-A/B ranking AUC is {b['uncertainty_ranking_auc']:.3f} and {c['uncertainty_ranking_auc']:.3f}, respectively. AUC 0.5 means chance ranking. These metrics cannot by themselves replace joint accuracy or safe abstention.\n\n"
     text+='## Evidence curves and rendering checks\n\n'
     text+='The fixed first 60 reserved episodes are checked at 0, 1, 2, 4 and 8 observations. The plot focuses on queries answerable at eight observations, and credits a correct resolution only when the current evidence justifies it. Perfect U accuracy at zero observations is trivial and is not called successful learning.\n\n![Evidence curve](results/figures/evidence_curve.png)\n\n'
+    text+=f"The resulting fixed cohort contains {curves['base'][0]['cohort_size']} queries. "
+    text+="The table below tracks answering A/B when the current observations still do not justify either answer. The denominator contains only queries unresolved at that prefix. At eight observations none remain unresolved, by the cohort definition. These percentages therefore describe premature certainty on the shorter prefixes, not the primary test's eight-observation uncertainty recall.\n\n"
+    text+='| Observations | Still unresolved in the fixed cohort | Qwen unjustified certainty | Troubadour unjustified certainty |\n|---|---:|---:|---:|\n'
+    for br,cr in zip(curves['base'],curves['candidate']):
+        assert br['k']==cr['k'] and br['cohort_size']==cr['cohort_size']
+        unresolved=round(br['cohort_size']*(1-br['oracle_resolvable_fraction']))
+        text+=f"| {br['k']} | {unresolved} | {percent(br['unjustified_certainty_rate'])} | {percent(cr['unjustified_certainty_rate'])} |\n"
+    text+='\n'
     text+='| Rendering (first 48 reserved episodes) | Qwen | Troubadour |\n|---|---:|---:|\n'
     for style,r in robustness.items():text+=f"| {style} | {percent(r['base']['accuracy'])} | {percent(r['candidate']['accuracy'])} |\n"
     text+='\nThese small, prospectively bounded subsets are exploratory. Their scores do not establish broad robustness.\n\n'
     text+=f"The 12 simple general-instruction smoke checks passed {smoke['base']['passed']}/12 for Qwen and {smoke['candidate']['passed']}/12 for Troubadour. This is too small to claim general capabilities were preserved.\n\n"
     text+='## Scope and reproducibility\n\n'
     s=result['selection']
-    text+=f"Published seed: {s['seed']}. Selected recipe: `{s['recipe']}` at microstep {s['checkpoint_microsteps']}. The exact weight, recipe, data, renderer and runtime identities are in `selection.json`. Failed and weaker trials are retained in [EXPERIMENT_LOG.md](EXPERIMENT_LOG.md).\n\n"
+    text+=f"Published seed: {s['seed']}. Selected recipe: `{s['recipe']}` at microstep {s['checkpoint_microsteps']}. The exact weight, recipe, data, renderer and runtime identities are in `results/selection.json` in GitHub and `selection.json` in the Hub releases. Failed and weaker trials are retained in [EXPERIMENT_LOG.md](EXPERIMENT_LOG.md).\n\n"
     text+='This first release is exploratory and uses one training seed. Independent-seed replication and the prepared budget-matched answer-key training control were not completed. Therefore neither a positive result nor a negative result establishes a general conclusion about post-training, a neural learning mechanism, or other model sizes. Repeated development comparisons also make development scores unsuitable as final evidence.\n\n'
     text+='Test data is public after evaluation. Future models may train on it; subsequent claims should disclose this and use genuinely held-out societies. The exact grammar solver is a transparent reference, not part of the neural predictor.\n'
     return text,methods

@@ -1,0 +1,426 @@
+{
+  "curves": {
+    "base": [
+      {
+        "k": 0,
+        "cohort_size": 40,
+        "oracle_resolvable_fraction": 0.0,
+        "justified_correct_resolution": 0.0,
+        "unjustified_certainty_rate": 0.0,
+        "answerable_accuracy": null,
+        "joint_accuracy_including_uncertainty": 1.0
+      },
+      {
+        "k": 1,
+        "cohort_size": 40,
+        "oracle_resolvable_fraction": 0.0,
+        "justified_correct_resolution": 0.0,
+        "unjustified_certainty_rate": 0.025,
+        "answerable_accuracy": null,
+        "joint_accuracy_including_uncertainty": 0.975
+      },
+      {
+        "k": 2,
+        "cohort_size": 40,
+        "oracle_resolvable_fraction": 0.0,
+        "justified_correct_resolution": 0.0,
+        "unjustified_certainty_rate": 0.55,
+        "answerable_accuracy": null,
+        "joint_accuracy_including_uncertainty": 0.45
+      },
+      {
+        "k": 4,
+        "cohort_size": 40,
+        "oracle_resolvable_fraction": 0.05,
+        "justified_correct_resolution": 0.0,
+        "unjustified_certainty_rate": 0.631578947368421,
+        "answerable_accuracy": 0.0,
+        "joint_accuracy_including_uncertainty": 0.35
+      },
+      {
+        "k": 8,
+        "cohort_size": 40,
+        "oracle_resolvable_fraction": 1.0,
+        "justified_correct_resolution": 0.3,
+        "unjustified_certainty_rate": null,
+        "answerable_accuracy": 0.3,
+        "joint_accuracy_including_uncertainty": 0.3
+      }
+    ],
+    "candidate": [
+      {
+        "k": 0,
+        "cohort_size": 40,
+        "oracle_resolvable_fraction": 0.0,
+        "justified_correct_resolution": 0.0,
+        "unjustified_certainty_rate": 0.0,
+        "answerable_accuracy": null,
+        "joint_accuracy_including_uncertainty": 1.0
+      },
+      {
+        "k": 1,
+        "cohort_size": 40,
+        "oracle_resolvable_fraction": 0.0,
+        "justified_correct_resolution": 0.0,
+        "unjustified_certainty_rate": 0.05,
+        "answerable_accuracy": null,
+        "joint_accuracy_including_uncertainty": 0.95
+      },
+      {
+        "k": 2,
+        "cohort_size": 40,
+        "oracle_resolvable_fraction": 0.0,
+        "justified_correct_resolution": 0.0,
+        "unjustified_certainty_rate": 0.55,
+        "answerable_accuracy": null,
+        "joint_accuracy_including_uncertainty": 0.45
+      },
+      {
+        "k": 4,
+        "cohort_size": 40,
+        "oracle_resolvable_fraction": 0.05,
+        "justified_correct_resolution": 0.05,
+        "unjustified_certainty_rate": 0.8947368421052632,
+        "answerable_accuracy": 1.0,
+        "joint_accuracy_including_uncertainty": 0.15
+      },
+      {
+        "k": 8,
+        "cohort_size": 40,
+        "oracle_resolvable_fraction": 1.0,
+        "justified_correct_resolution": 0.625,
+        "unjustified_certainty_rate": null,
+        "answerable_accuracy": 0.625,
+        "joint_accuracy_including_uncertainty": 0.625
+      }
+    ]
+  },
+  "rendering_checks": {
+    "prose": {
+      "base": {
+        "n": 48,
+        "accuracy": 0.3333333333333333,
+        "balanced_accuracy": 0.3333333333333333,
+        "answerable_accuracy": 0.40625,
+        "conditional_AB_accuracy": 0.65625,
+        "uncertainty_ranking_auc": 0.455078125,
+        "uncertainty_recall": 0.1875,
+        "uncertainty_precision": 0.1875,
+        "paired_both_correct": 0.20833333333333334,
+        "paired_answerable_both_correct": 0.25,
+        "contrast_both_queries_correct": null,
+        "invalid": 0,
+        "expected_counts": {
+          "U": 16,
+          "A": 16,
+          "B": 16
+        },
+        "prediction_counts": {
+          "A": 12,
+          "B": 20,
+          "U": 16
+        },
+        "seconds": 208.010329246521
+      },
+      "candidate": {
+        "n": 48,
+        "accuracy": 0.4166666666666667,
+        "balanced_accuracy": 0.4166666666666667,
+        "answerable_accuracy": 0.53125,
+        "conditional_AB_accuracy": 0.65625,
+        "uncertainty_ranking_auc": 0.453125,
+        "uncertainty_recall": 0.1875,
+        "uncertainty_precision": 0.23076923076923078,
+        "paired_both_correct": 0.2916666666666667,
+        "paired_answerable_both_correct": 0.375,
+        "contrast_both_queries_correct": null,
+        "invalid": 0,
+        "expected_counts": {
+          "U": 16,
+          "A": 16,
+          "B": 16
+        },
+        "prediction_counts": {
+          "A": 15,
+          "B": 20,
+          "U": 13
+        },
+        "seconds": 66.53535676002502
+      },
+      "society_pairs": 8,
+      "cluster_mean_gain": 0.08333333333333333,
+      "cluster_bootstrap_95ci": [
+        0.020833333333333332,
+        0.14583333333333331
+      ],
+      "method": "paired bootstrap over complement-society clusters, equal cluster weighting; 10000 replicates"
+    },
+    "symbols": {
+      "base": {
+        "n": 48,
+        "accuracy": 0.3333333333333333,
+        "balanced_accuracy": 0.3333333333333333,
+        "answerable_accuracy": 0.5,
+        "conditional_AB_accuracy": 0.53125,
+        "uncertainty_ranking_auc": 0.6064453125,
+        "uncertainty_recall": 0.0,
+        "uncertainty_precision": 0.0,
+        "paired_both_correct": 0.16666666666666666,
+        "paired_answerable_both_correct": 0.25,
+        "contrast_both_queries_correct": null,
+        "invalid": 0,
+        "expected_counts": {
+          "U": 16,
+          "A": 16,
+          "B": 16
+        },
+        "prediction_counts": {
+          "A": 11,
+          "B": 35,
+          "U": 2
+        },
+        "seconds": 142.15941667556763
+      },
+      "candidate": {
+        "n": 48,
+        "accuracy": 0.4375,
+        "balanced_accuracy": 0.4375,
+        "answerable_accuracy": 0.46875,
+        "conditional_AB_accuracy": 0.5625,
+        "uncertainty_ranking_auc": 0.513671875,
+        "uncertainty_recall": 0.375,
+        "uncertainty_precision": 0.4,
+        "paired_both_correct": 0.16666666666666666,
+        "paired_answerable_both_correct": 0.1875,
+        "contrast_both_queries_correct": null,
+        "invalid": 0,
+        "expected_counts": {
+          "U": 16,
+          "A": 16,
+          "B": 16
+        },
+        "prediction_counts": {
+          "B": 28,
+          "U": 15,
+          "A": 5
+        },
+        "seconds": 42.30292248725891
+      },
+      "society_pairs": 8,
+      "cluster_mean_gain": 0.10416666666666666,
+      "cluster_bootstrap_95ci": [
+        0.0,
+        0.20833333333333331
+      ],
+      "method": "paired bootstrap over complement-society clusters, equal cluster weighting; 10000 replicates"
+    }
+  },
+  "smoke": {
+    "base": {
+      "note": "12 simple instruction smoke checks, not evidence of broad general capability",
+      "passed": 11,
+      "total": 12,
+      "cases": [
+        {
+          "name": "addition",
+          "prompt": "What is 19 + 23? Reply with only the integer.",
+          "expected": "42",
+          "response": "42",
+          "correct": true,
+          "seconds": 3.0267980098724365
+        },
+        {
+          "name": "multiply",
+          "prompt": "What is 7 times 8? Reply with only the integer.",
+          "expected": "56",
+          "response": "56",
+          "correct": true,
+          "seconds": 1.733670949935913
+        },
+        {
+          "name": "sort",
+          "prompt": "Sort 9, 2, 5 in ascending order. Reply exactly as comma-separated integers without spaces.",
+          "expected": "2,5,9",
+          "response": "2,5,9",
+          "correct": true,
+          "seconds": 2.86738920211792
+        },
+        {
+          "name": "reverse",
+          "prompt": "Reverse the letters in the word lamp. Reply only with the reversed string.",
+          "expected": "pmal",
+          "response": "malp",
+          "correct": false,
+          "seconds": 2.7101151943206787
+        },
+        {
+          "name": "copy",
+          "prompt": "Reply with exactly this word: lantern",
+          "expected": "lantern",
+          "response": "lantern",
+          "correct": true,
+          "seconds": 1.4463541507720947
+        },
+        {
+          "name": "extract",
+          "prompt": "The traveler is named Mira and her companion is Oren. Reply only with the traveler's name.",
+          "expected": "Mira",
+          "response": "Mira",
+          "correct": true,
+          "seconds": 1.987515926361084
+        },
+        {
+          "name": "count",
+          "prompt": "How many items are in this list: apple, pear, plum, peach? Reply only with the integer.",
+          "expected": "4",
+          "response": "4",
+          "correct": true,
+          "seconds": 1.7788619995117188
+        },
+        {
+          "name": "case",
+          "prompt": "Convert the word TRAVEL to lowercase. Reply with only the converted word.",
+          "expected": "travel",
+          "response": "travel",
+          "correct": true,
+          "seconds": 1.897078037261963
+        },
+        {
+          "name": "negation",
+          "prompt": "The box contains a red token and no blue tokens. Does it contain a blue token? Reply exactly yes or no.",
+          "expected": "no",
+          "response": "no",
+          "correct": true,
+          "seconds": 2.0279381275177
+        },
+        {
+          "name": "conditional",
+          "prompt": "If the lamp is on, reply sun. Otherwise reply moon. The lamp is off.",
+          "expected": "moon",
+          "response": "moon",
+          "correct": true,
+          "seconds": 1.5714070796966553
+        },
+        {
+          "name": "format",
+          "prompt": "Reply with the JSON object whose only key is x and whose value is 3. Use no spaces or markdown.",
+          "expected": "{\"x\":3}",
+          "response": "{\"x\":3}",
+          "correct": true,
+          "seconds": 2.544711112976074
+        },
+        {
+          "name": "sequence",
+          "prompt": "What comes next in 2, 4, 6, 8? Reply only with the integer.",
+          "expected": "10",
+          "response": "10",
+          "correct": true,
+          "seconds": 0.9220678806304932
+        }
+      ]
+    },
+    "candidate": {
+      "note": "12 simple instruction smoke checks, not evidence of broad general capability",
+      "passed": 11,
+      "total": 12,
+      "cases": [
+        {
+          "name": "addition",
+          "prompt": "What is 19 + 23? Reply with only the integer.",
+          "expected": "42",
+          "response": "42",
+          "correct": true,
+          "seconds": 0.4835472106933594
+        },
+        {
+          "name": "multiply",
+          "prompt": "What is 7 times 8? Reply with only the integer.",
+          "expected": "56",
+          "response": "56",
+          "correct": true,
+          "seconds": 0.49234795570373535
+        },
+        {
+          "name": "sort",
+          "prompt": "Sort 9, 2, 5 in ascending order. Reply exactly as comma-separated integers without spaces.",
+          "expected": "2,5,9",
+          "response": "2,5,9",
+          "correct": true,
+          "seconds": 0.5188479423522949
+        },
+        {
+          "name": "reverse",
+          "prompt": "Reverse the letters in the word lamp. Reply only with the reversed string.",
+          "expected": "pmal",
+          "response": "malp",
+          "correct": false,
+          "seconds": 0.632922887802124
+        },
+        {
+          "name": "copy",
+          "prompt": "Reply with exactly this word: lantern",
+          "expected": "lantern",
+          "response": "lantern",
+          "correct": true,
+          "seconds": 0.5518147945404053
+        },
+        {
+          "name": "extract",
+          "prompt": "The traveler is named Mira and her companion is Oren. Reply only with the traveler's name.",
+          "expected": "Mira",
+          "response": "Mira",
+          "correct": true,
+          "seconds": 0.7790079116821289
+        },
+        {
+          "name": "count",
+          "prompt": "How many items are in this list: apple, pear, plum, peach? Reply only with the integer.",
+          "expected": "4",
+          "response": "4",
+          "correct": true,
+          "seconds": 0.7247340679168701
+        },
+        {
+          "name": "case",
+          "prompt": "Convert the word TRAVEL to lowercase. Reply with only the converted word.",
+          "expected": "travel",
+          "response": "travel",
+          "correct": true,
+          "seconds": 0.6896908283233643
+        },
+        {
+          "name": "negation",
+          "prompt": "The box contains a red token and no blue tokens. Does it contain a blue token? Reply exactly yes or no.",
+          "expected": "no",
+          "response": "no",
+          "correct": true,
+          "seconds": 0.7926909923553467
+        },
+        {
+          "name": "conditional",
+          "prompt": "If the lamp is on, reply sun. Otherwise reply moon. The lamp is off.",
+          "expected": "moon",
+          "response": "moon",
+          "correct": true,
+          "seconds": 0.7604110240936279
+        },
+        {
+          "name": "format",
+          "prompt": "Reply with the JSON object whose only key is x and whose value is 3. Use no spaces or markdown.",
+          "expected": "{\"x\":3}",
+          "response": "{\"x\":3}",
+          "correct": true,
+          "seconds": 0.9315381050109863
+        },
+        {
+          "name": "sequence",
+          "prompt": "What comes next in 2, 4, 6, 8? Reply only with the integer.",
+          "expected": "10",
+          "response": "10",
+          "correct": true,
+          "seconds": 0.8023531436920166
+        }
+      ]
+    }
+  }
+}

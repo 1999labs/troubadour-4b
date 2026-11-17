@@ -1,0 +1,38 @@
+{
+  "model_repository": "noahmclaughlin/Troubadour-4B",
+  "model_revision": "a1a9911fe723a2da6a40cec6786fe80b296653b8",
+  "dataset_repository": "noahmclaughlin/Troubadour",
+  "dataset_revision": "ed8341fc6d1499227c7767779ad755d2405e3651",
+  "authenticated": false,
+  "verified_file_counts": {
+    "model": 63,
+    "dataset": 29
+  },
+  "split_rows": {
+    "train": 5502,
+    "train_choice": 2850,
+    "train_counterfactual": 3690,
+    "validation": 240,
+    "validation_transfer": 150,
+    "validation_contrast": 160,
+    "test": 306,
+    "test_transfer": 150,
+    "test_contrast": 204
+  },
+  "all_public_rows_match_staged_source": true,
+  "shared_schema": true,
+  "adapter_sha256": "875c12bbecfed33888290b438a43a3f63c5f076bd0d16528018289dabdf3976c",
+  "fresh_downloaded_source_used": true,
+  "prediction": {
+    "answer": "U",
+    "choice_probabilities": {
+      "A": 0.2890625,
+      "B": 0.2890625,
+      "U": 0.421875
+    }
+  },
+  "probability_max_error_vs_selected_dev": 0.0,
+  "license": "apache-2.0",
+  "environment_note": "Fresh public model/data downloads and a new inference process using downloaded source; a new minimal inference environment was used, while the pinned original base cache and existing OS were reused. Dataset verification used the project environment. This is not a clean OS install.",
+  "verified_at": "2026-11-17T10:08:10.045539+00:00"
+}

@@ -1,0 +1,7 @@
+{
+  "http_status": 200,
+  "title": "Troubadour",
+  "component_count": 15,
+  "bind_address": "127.0.0.1",
+  "scope": "Advertised local demo starts and serves its UI/configuration. No comparison callback or model inference was invoked in this startup check; published model inference is verified separately."
+}

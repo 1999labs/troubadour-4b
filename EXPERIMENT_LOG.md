@@ -2,7 +2,7 @@
 
 Research question: **Can post-training teach a model street smarts so that it can learn and apply unfamiliar social rules?**
 
-This is the development history, not the reserved-test result. All candidate comparisons below used training/development societies only. Final evaluation follows this frozen selection; its report will appear in RESULTS.md. See [RESEARCH_PLAN.md](RESEARCH_PLAN.md) for the prospective design and amendments. The first release is a single-seed exploratory experiment.
+This is the development history, not the reserved-test result. All candidate comparisons below used training/development societies only. The reserved result is reported in [RESULTS.md](RESULTS.md). See [RESEARCH_PLAN.md](RESEARCH_PLAN.md) for the prospective design and amendments. The first release is a single-seed exploratory experiment.
 
 ## Authoritative development comparison
 
@@ -24,7 +24,7 @@ The IID checks require at least +10 points joint accuracy over raw Qwen, a posit
 
 On development, the nearest-example heuristic scores 62.50%, and query-blind observation majority scores 48.33%. Original Qwen with a U-logit bias of -4.0 fitted on this same development set scores 44.58%; this is an optimistic tuning result. The frozen bias is applied unchanged to final tests. None of these controls changes the primary unadjusted neural predictor.
 
-Selected recipe: `choice-slow-seed17`, microstep 1200, seed 17. None of the eight bounded v4 candidates met the mandatory IID development criteria. Under the recorded fallback rule, select the highest joint accuracy, then uncertainty recall, then earlier microstep. The long-run 1200 checkpoint tied balanced-rate 600 at 48.75% accuracy and won on uncertainty recall (21.25% versus 11.25%). Publish as an exploratory research checkpoint; do not claim validated improvement from development scores. No final encounters were generated or inspected. The selection record binds the actual weights and prediction file, not just a checkpoint name. It was frozen before final encounter generation. See `results/selection.json` in GitHub or `selection.json` in the Hub releases.
+Selected recipe: `choice-slow-seed17`, microstep 1200, seed 17. The selection-time record states: “None of the eight bounded v4 candidates met the mandatory IID development criteria. Under the recorded fallback rule, select the highest joint accuracy, then uncertainty recall, then earlier microstep. The long-run 1200 checkpoint tied balanced-rate 600 at 48.75% accuracy and won on uncertainty recall (21.25% versus 11.25%). Publish as an exploratory research checkpoint; do not claim validated improvement from development scores. No final encounters were generated or inspected.” The selection record binds the actual weights and prediction file, not just a checkpoint name. It was frozen before final encounter generation. See `results/selection.json` in GitHub or `selection.json` in the Hub releases.
 
 ## Trials and changes in order
 
@@ -56,7 +56,7 @@ A mixed-prefix audit failed the unchanged 0.001 probability tolerance. Direct di
 
 Release scoring was changed to an unpadded full output projection for each input. Cache protocol 2 computes missing frozen prefixes individually so their values do not depend on other batch members. Only known unpadded 320-token entries from the earlier cache were migrated; three short diagnostic entries were excluded. All candidate selection comparisons and U-bias fits were rerun under v4 before final selection. The prompt renderer, candidate bounds, data allocation and success thresholds did not change.
 
-Both original Qwen and the long-run step-1200 adapter matched scalar reference probabilities exactly on four mixed-prefix cases and 16 full-prefix cases each, including migrated cache entries. A separate two-example audit with nonzero adapters found identical forward loss and adapter gradients for cached and uncached training. These are finite implementation audits, not exhaustive proof. The unchanged training objective still uses its last-vector classification loss; inference uses the canonical full projection. Audit records are public in `results/audits/`.
+Both original Qwen and the long-run step-1200 adapter matched scalar reference probabilities exactly on four mixed-prefix cases and 16 full-prefix cases each, including migrated cache entries. A separate two-example audit with nonzero adapters found identical forward loss and adapter gradients for cached and uncached training. These are finite implementation audits, not exhaustive proof. The unchanged training objective still uses its last-vector classification loss; inference uses the canonical full projection. Audit records are public in the source repository’s `results/audits/`.
 
 A development watcher exited after reading a partially written status file. Replacement job status writes are atomic, and the queue tolerates the older process's transient partial reads. The trainer was not restarted by this orchestration repair.
 

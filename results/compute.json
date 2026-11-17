@@ -1,0 +1,181 @@
+{
+  "hardware": {
+    "cpu": "Apple M2",
+    "cpu_cores": 8,
+    "unified_memory_bytes": 17179869184,
+    "macos_version": "26.6.2",
+    "architecture": "arm64",
+    "python": "3.12.15",
+    "packages": {
+      "mlx": "0.32.4",
+      "mlx-lm": "0.32.2",
+      "transformers": "5.23.0",
+      "huggingface-hub": "2.4.0",
+      "datasets": "5.2.0"
+    },
+    "training_memory_limit_bytes": 10737418240,
+    "training_cache_limit_bytes": 268435456,
+    "note": "Allocator limits are configured limits, not measured peak usage. No energy estimate is claimed."
+  },
+  "training_jobs": [
+    {
+      "name": "sft-seed17",
+      "status": "failed",
+      "wall_seconds": 210.54306817054749,
+      "recorded_pause_seconds": 0,
+      "wall_seconds_excluding_recorded_pauses": 210.54306817054749
+    },
+    {
+      "name": "sft-v2-seed17",
+      "status": "failed",
+      "wall_seconds": 1123.9088070392609,
+      "recorded_pause_seconds": 0,
+      "wall_seconds_excluding_recorded_pauses": 1123.9088070392609
+    },
+    {
+      "name": "sft-v3-recovery",
+      "status": "failed",
+      "wall_seconds": 30.071751832962036,
+      "recorded_pause_seconds": 0,
+      "wall_seconds_excluding_recorded_pauses": 30.071751832962036
+    },
+    {
+      "name": "choice-seed17",
+      "status": "complete",
+      "wall_seconds": 1614.820506811142,
+      "recorded_pause_seconds": 0,
+      "wall_seconds_excluding_recorded_pauses": 1614.820506811142
+    },
+    {
+      "name": "choice-slow-seed17",
+      "status": "complete",
+      "wall_seconds": 28106.10328602791,
+      "recorded_pause_seconds": 6477.072407245636,
+      "wall_seconds_excluding_recorded_pauses": 21629.030878782272
+    },
+    {
+      "name": "counterfactual-small-seed17",
+      "status": "complete",
+      "wall_seconds": 4453.387722969055,
+      "recorded_pause_seconds": 0,
+      "wall_seconds_excluding_recorded_pauses": 4453.387722969055
+    },
+    {
+      "name": "balanced-rate-seed17",
+      "status": "complete",
+      "wall_seconds": 2737.3275418281555,
+      "recorded_pause_seconds": 0,
+      "wall_seconds_excluding_recorded_pauses": 2737.3275418281555
+    }
+  ],
+  "selected_checkpoint": {
+    "microsteps": 1200,
+    "batch_size": 2,
+    "gradient_accumulation_steps": 4,
+    "optimizer_updates": 300,
+    "example_presentations": 2400,
+    "input_tokens_per_example": 320,
+    "logical_input_token_positions": 768000,
+    "supervised_decisions": 2400
+  },
+  "limits": "Job wall time includes loading, validation and cache I/O. Subtracted pauses are explicitly recorded SIGSTOP intervals. This is not GPU-kernel time. Untracked setup/audits are not included. No power/energy or measured peak-memory estimate is claimed.",
+  "evaluation_jobs": [
+    {
+      "name": "base-final",
+      "condition": "final",
+      "model": "base",
+      "inputs": 306,
+      "logical_input_tokens": 97920,
+      "wall_seconds": 832.663183927536
+    },
+    {
+      "name": "candidate-final",
+      "condition": "final",
+      "model": "candidate",
+      "inputs": 306,
+      "logical_input_tokens": 97920,
+      "wall_seconds": 270.8966100215912
+    },
+    {
+      "name": "base-final-transfer",
+      "condition": "final-transfer",
+      "model": "base",
+      "inputs": 150,
+      "logical_input_tokens": 48000,
+      "wall_seconds": 421.28925585746765
+    },
+    {
+      "name": "candidate-final-transfer",
+      "condition": "final-transfer",
+      "model": "candidate",
+      "inputs": 150,
+      "logical_input_tokens": 48000,
+      "wall_seconds": 140.46036195755005
+    },
+    {
+      "name": "base-final-contrast",
+      "condition": "final-contrast",
+      "model": "base",
+      "inputs": 204,
+      "logical_input_tokens": 65280,
+      "wall_seconds": 561.7774150371552
+    },
+    {
+      "name": "candidate-final-contrast",
+      "condition": "final-contrast",
+      "model": "candidate",
+      "inputs": 204,
+      "logical_input_tokens": 65280,
+      "wall_seconds": 190.59012699127197
+    },
+    {
+      "name": "base-final-curve",
+      "condition": "final-curve",
+      "model": "base",
+      "inputs": 300,
+      "logical_input_tokens": 75180,
+      "wall_seconds": 521.5035409927368
+    },
+    {
+      "name": "candidate-final-curve",
+      "condition": "final-curve",
+      "model": "candidate",
+      "inputs": 300,
+      "logical_input_tokens": 75180,
+      "wall_seconds": 230.66844177246094
+    },
+    {
+      "name": "base-final-prose",
+      "condition": "final-prose",
+      "model": "base",
+      "inputs": 48,
+      "logical_input_tokens": 23472,
+      "wall_seconds": 220.7310299873352
+    },
+    {
+      "name": "candidate-final-prose",
+      "condition": "final-prose",
+      "model": "candidate",
+      "inputs": 48,
+      "logical_input_tokens": 23472,
+      "wall_seconds": 80.24432730674744
+    },
+    {
+      "name": "base-final-symbols",
+      "condition": "final-symbols",
+      "model": "base",
+      "inputs": 48,
+      "logical_input_tokens": 15552,
+      "wall_seconds": 150.5231738090515
+    },
+    {
+      "name": "candidate-final-symbols",
+      "condition": "final-symbols",
+      "model": "candidate",
+      "inputs": 48,
+      "logical_input_tokens": 15552,
+      "wall_seconds": 50.15840697288513
+    }
+  ],
+  "evaluation_timing_note": "Completed reserved scoring jobs only. Base runs populate caches reused by candidate runs; these are resource records, not a fair model-speed comparison. Mixed-prefix audits and general-instruction smoke checks are excluded."
+}
