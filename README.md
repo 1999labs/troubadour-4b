@@ -132,3 +132,7 @@ python -m troubadour.run_job --name counterfactual-seed17 -- \
 ```
 
 Do not shuffle individual rows before the grouped sampler: the generated JSONL preserves complete six-example groups. A smaller two-layer pilot configuration is also provided for development.
+
+## Prepared optimization fallback
+
+`configs/balanced-rate-seed17.yaml` and `troubadour.train_balanced_choice` prepare a moderate-rate alternative using the existing `train_choice` data. Its sampler forms updates with two examples of each label and preserves every row once per epoch. No additional dataset split is needed. It is a contingency if the longer run remains weak, not a measured improvement. Development checkpoints are fixed at 300 and 600 before running it.

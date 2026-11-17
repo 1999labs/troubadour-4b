@@ -7,9 +7,10 @@ import mlx.core as mx
 from mlx_lm import lora
 from . import train_cached_choice as cached
 from . import train_choice
-from .group_sampling import group_indices
+from .group_sampling import group_indices, balanced_indices
 
 _original_batches=cached.token_batches
+REBALANCE_EXISTING_LABELS=False
 
 
 def grouped_batches(dataset,batch_size,max_seq_length,loop=False,seed=None,comm_group=None):
@@ -20,7 +21,12 @@ def grouped_batches(dataset,batch_size,max_seq_length,loop=False,seed=None,comm_
     if comm_group is not None and comm_group.size()!=1:raise ValueError('This sampler is single-device')
     labels=train_choice._label_ids.tolist()
     sampler_seed=int(np.random.randint(0,2**31)) if seed is None else seed
-    for group in group_indices(len(dataset),sampler_seed):
+    if REBALANCE_EXISTING_LABELS:
+        targets=[dataset[i][0][dataset[i][1]] for i in range(len(dataset))]
+        indices=balanced_indices(targets,sampler_seed)
+    else:
+        indices=group_indices(len(dataset),sampler_seed)
+    for group in indices:
         examples=[dataset[j] for j in group]
         targets=[tokens[offset] for tokens,offset in examples]
         if Counter(targets)!=Counter({c:2 for c in labels}):raise ValueError('Each update must contain two A, two B and two U targets')
