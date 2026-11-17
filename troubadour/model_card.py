@@ -72,7 +72,7 @@ pip install -c requirements.lock -r requirements.txt
 python -m troubadour.predict --adapter adapter --episode example_episode.json
 ```
 
-The supplied example contains only `observations` and `query`. The predictor loads the original pinned Qwen checkpoint, applies the adapter, and reports the most likely A/B/U token plus normalized probabilities. A means respect, B means breach, U means insufficient evidence. Those probabilities are not calibrated confidence estimates. The published predictor does not apply the optional development-fitted bias.
+The supplied example contains only `observations` and `query`. The predictor loads the original pinned Qwen checkpoint, applies the adapter, and reports the most likely A/B/U token plus normalized probabilities. A means respect, B means breach, U means insufficient evidence. Those probabilities are not calibrated confidence estimates. The published predictor does not apply the optional development-fitted bias. No extra reasoning tokens or tool-assisted inference are used in the benchmark.
 
 To compare original Qwen on the same example, omit `--adapter adapter`. To open the optional local demo, install `gradio` using the same constraints and run `python app.py --adapter adapter`. The demo binds to localhost, and random demo worlds may overlap training rules. It is not the held-out evaluation.
 
@@ -85,6 +85,10 @@ Training is supervised classification over the model's original A/B/U next-token
 The dataset generator enumerates 612 unique Boolean conventions over five binary encounter features. Whole rule identities and their complements are separated across training, development and final evaluation. A second test reserves combinations of relevant features. Final encounters were generated only after the development-selected adapter, recipe, scorer and calibration settings were frozen.
 
 '''
+    pool_name,pool_size=('train_counterfactual',3690) if 'counterfactual' in config['data'] else ('train_choice',2850)
+    presentations=selection['checkpoint_microsteps']*config['batch_size']
+    updates=selection['checkpoint_microsteps']//config['grad_accumulation_steps']
+    text+=f"The selected training pool was the `{pool_name}` dataset split: {pool_size:,} distinct eight-observation episodes, balanced across A/B/U. The retained checkpoint processed {presentations:,} example presentations in {updates:,} optimizer updates. Pool size and processed presentations are different quantities; an early checkpoint may not have seen the whole pool. The full `train` split and the alternative training views overlap and must not be counted as independent examples.\n\n"
     text+=f"Selected recipe: `{selection['recipe']}`. Seed: {selection['seed']}. Selected microstep: {selection['checkpoint_microsteps']}. See [selection.json](selection.json) for SHA-256 identities and the recorded selection reason. `final_data_seen: false` records the state at selection time; final evaluation was subsequently performed.\n\n"
     text+='''Frozen lower-layer activations are cached during some training/evaluation runs to avoid recomputing unchanged work. This preserves the original model computation; it adds no oracle features and contains no future answer tokens. Full/cached inference probabilities and the separate training-objective gradients were checked on small audit cases. Release scoring uses protocol v4: one unpadded input and the full output projection. Earlier development scoring was corrected after a low-precision projection discrepancy, and selection was rerun before the reserved test. The released predictor uses the full model with its adapter and does not need the activation cache.
 
