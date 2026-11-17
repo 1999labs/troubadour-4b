@@ -4,6 +4,8 @@
 
 Model: **Troubadour-4B**. Dataset: **Troubadour**. Evaluation: **Troubadour-Bench**.
 
+[Model repository](https://huggingface.co/noahmclaughlin/Troubadour-4B) · [Dataset](https://huggingface.co/datasets/noahmclaughlin/Troubadour) · [Prospective experiment plan](RESEARCH_PLAN.md)
+
 Here, **street smarts** means noticing local conventions, applying what the evidence supports, and recognizing when you have not seen enough to know. This is a controlled, synthetic convention-inference experiment. The model sees a few encounters from an unfamiliar settlement and interprets a new encounter as respect (A), breach (B), or insufficient evidence (U). A program determines what follows from the visible evidence under an explicitly disclosed finite rule grammar. No language model judges the answers.
 
 **Status: experiment in progress. No final performance claim or model release yet.** See [EXPERIMENT_LOG.md](EXPERIMENT_LOG.md) for development results and [RESEARCH_PLAN.md](RESEARCH_PLAN.md) for the prospective design and recorded amendments.

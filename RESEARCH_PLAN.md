@@ -66,3 +66,7 @@ Before final generation, evaluation metadata was extended to bind the exact rend
 
 ## Threshold-independent diagnostics
 Report conditional A/B accuracy on determinate questions (ignore U while choosing between A and B), and the AUC of the U-versus-best-A/B logit margin for identifying underdetermined questions. Both are invariant to a single global U-logit adjustment. These are diagnostic, not replacements for the frozen primary criteria. They help distinguish learning the local answer or recognizing missing evidence from changing how often the model abstains.
+
+## Development checkpoint selection
+
+For the longer low-rate run, full-development checkpoints are planned at 600, 1200, 2100 and 3000 microsteps. Earlier 60-question probes are diagnostic and do not replace the 240-question development set. If the longer recipe remains weak, the prepared counterfactual recipe may be evaluated as a separate candidate. Among fully evaluated seed 17 candidates, prefer candidates meeting the development analogues of the primary criteria; rank eligible candidates by joint A/B/U accuracy, then uncertainty recall, then earlier checkpoint. If no candidate meets those criteria, select the highest development accuracy by the same tie breakers and explicitly label the final release as a research checkpoint rather than a validated improvement. No reserved final examples select a checkpoint, recipe, threshold, or reporting metric.

@@ -34,6 +34,20 @@ Evaluation sets are deliberately class-balanced, not representative of a natural
 
 `messages` contains the system instruction, public observations/query, and target assistant label. `answer`, `observations`, `query`, `society_pair`, `rule_mask`, `family`, `consistent_rules`, and `k` support auditing. `contrast_group` identifies paired queries sharing observations in the stress split and is null in the other splits. All splits share one Arrow schema so they load together. Hidden `rule_mask` and metadata must NEVER be included in the tested model's prompt. The benchmark runner constructs inputs from observations/query only; the published answer is used solely for checking.
 
+### Compact encounter encoding
+
+Each encounter is an integer from 0 through 31. Decode it into five binary cues, in this order: rank, setting, gesture, favor, origin. The integer is `rank + 2*setting + 4*gesture + 8*favor + 16*origin`.
+
+| Cue | Value 0 | Value 1 |
+|---|---|---|
+| Rank | lower | higher |
+| Setting | private | public |
+| Gesture | accept | decline |
+| Prior favor | no | yes |
+| Origin | local | visitor |
+
+An observation `[state, value]` records one encounter and its label: value 0 means B, value 1 means A. `query` is another encounter integer. For example, state 0 is a lower-ranked local recipient accepting a token privately, with no prior favor. The exported `messages` already translates these integers into the text the model sees. The `rule_mask` integer is audit-only: bit `state` stores that world's hidden answer and must never enter inference.
+
 All prose is rendered from deterministic templates. No external model or human cultural judgments generated the labels. The final test is generated only after model selection is frozen; the public release makes it available for independent reproduction. Once public, a new model could train on it, so future claims should disclose contamination and use fresh held-out rules where possible.
 
 ## Limitations
