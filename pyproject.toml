@@ -2,7 +2,7 @@
 name = "troubadour-bench"
 version = "0.1.0"
 description = "Learning unfamiliar conventions from evidence"
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 dependencies = ["numpy", "huggingface_hub", "datasets"]
 [project.optional-dependencies]
 mac = ["mlx-lm[train]"]

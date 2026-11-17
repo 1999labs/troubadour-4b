@@ -20,10 +20,10 @@ The task is deliberately bounded. It is not evidence about real cultures, consci
 
 ## Setup on Apple silicon
 
-Use Python 3.11 or newer, with sufficient memory and working power for training. The development machine is an Apple M2 with 16 GiB unified memory.
+Use Python 3.12, with sufficient memory and working power for training. The pinned NumPy and plotting dependencies require Python 3.12 or newer. The development machine is an Apple M2 with 16 GiB unified memory.
 
 ```bash
-python3 -m venv .venv
+python3.12 -m venv .venv
 source .venv/bin/activate
 pip install -c requirements.lock -e '.[mac,dev]'
 pytest -q

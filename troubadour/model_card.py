@@ -63,7 +63,7 @@ The base is a dense decoder-only transformer with 36 layers, hidden size 2,560, 
 The measured environment was Python 3.12.15 on an Apple M2 with 16 GiB unified memory. MLX handles local Apple GPU compute. No inference API key or paid cloud service is needed.
 
 ```bash
-python3 -m venv .venv
+python3.12 -m venv .venv
 source .venv/bin/activate
 pip install huggingface-hub==2.4.0
 hf download noahmclaughlin/Troubadour-4B --local-dir troubadour-release
