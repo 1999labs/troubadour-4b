@@ -10,6 +10,8 @@ Here, **street smarts** means noticing local conventions, applying what the evid
 
 **Status: experiment in progress. No final performance claim or model release yet.** See [EXPERIMENT_LOG.md](EXPERIMENT_LOG.md) for development results and [RESEARCH_PLAN.md](RESEARCH_PLAN.md) for the prospective design and recorded amendments.
 
+For an intuitive introduction, read [a visit to an unfamiliar settlement](EXAMPLE.md). It shows how the same observations can justify one answer while leaving another unresolved.
+
 ## What is being tested?
 
 There are 612 unique possible conventions over five binary encounter features. Training and evaluation societies have different complete truth tables; complement worlds stay together in one split. Some feature combinations are reserved for transfer tests. Queries never simply repeat a demonstrated complete encounter.

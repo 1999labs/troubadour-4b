@@ -37,12 +37,19 @@ def main():
         shutil.copy2('NOTICE',dest/'NOTICE')
         shutil.copy2('RESEARCH_PLAN.md',dest/'RESEARCH_PLAN.md')
         shutil.copy2('EXPERIMENT_LOG.md',dest/'EXPERIMENT_LOG.md')
+        for name in ['RESULTS.md','EXAMPLE.md','COMPUTE.md']:
+            shutil.copy2(name,dest/name)
+        shutil.copytree('results/figures',dest/'results/figures',dirs_exist_ok=True)
+        shutil.copy2('results/secondary.json',dest/'SECONDARY_RESULTS.json')
+        shutil.copy2('results/compute.json',dest/'COMPUTE.json')
+        shutil.copy2(selection['training_config'],dest/'training_config.yaml')
         shutil.copy2('artifacts/selection.json',dest/'selection.json')
         for filename in ['base-calibration.json','candidate-calibration.json']:
             shutil.copy2(Path('artifacts')/filename,dest/filename)
         shutil.copy2('data/split_manifest.json',dest/'split_manifest.json')
         shutil.copy2('SUCCESS_CRITERIA.json',dest/'SUCCESS_CRITERIA.json')
         shutil.copy2(a.results,dest/'RESULTS.json')
+    shutil.copy2('MODEL_CARD.md',model/'README.md')
     source=Path(a.adapter)
     if hashlib.sha256((source/'adapter_config.json').read_bytes()).hexdigest()!=selection['adapter_config_sha256']:
         raise SystemExit('Adapter configuration differs from frozen selection')
