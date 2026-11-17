@@ -6,7 +6,7 @@ Operational question: Can post-training improve inference of unfamiliar syntheti
 
 This is a controlled rule-induction study in social language, not a test of real-world cultural competence or human theory of mind. Prior work includes MetaICL (NAACL 2022), Symbol Tuning (EMNLP 2023), and work on semantic priors in in-context learning. Novelty is not claimed without a wider literature review.
 
-Starting checkpoint: mlx-community/Qwen3-4B-Instruct-2507-4bit, frozen revision recorded before use. Same quantization, prompt, and decoding are used before/after training. Fresh LoRA, not Mixed-Messenger weights.
+Starting checkpoint: mlx-community/Qwen3-4B-Instruct-2507-4bit, frozen revision recorded before use. Same quantization, prompt, and decoding are used before/after training. LoRA adapters are initialized fresh from this starting checkpoint.
 
 We represent an encounter with five binary cues: recipient status relative to giver, public/private setting, accepting/declining a token, prior favor, visitor/local recipient. Synthetic A/B meanings are respect/breach. Both polarity assignments occur equally via paired complement worlds. No real cultural labels.
 
@@ -74,3 +74,5 @@ For the longer low-rate run, full-development checkpoints are planned at 600, 12
 ## Resource-budget amendment before final data
 
 The computer returned to battery power during the counterfactual pilot. While it remains off AC, prioritize completion of that 600-microstep trial, full development comparison, reserved evaluation and public release verification over further long-run checkpoints. The long-run 600 checkpoint is already fully evaluated. Planned 1200/2100/3000 checkpoints may therefore be omitted; an interrupted longer schedule must not be described as completed. All original success thresholds remain unchanged. Select among fully development-tested checkpoints using the recorded rule, and disclose this reduced budget and any omitted controls/replicas. Reserved data remains ungenerated at this amendment. If reliable AC returns before selection, additional planned development work remains possible.
+
+Before seeing any full counterfactual development score, bound its checkpoint comparison to 300 and 600 microsteps, alongside the already evaluated longer-run 600 checkpoint. This permits a documented early-checkpoint choice without expanding the search after seeing reserved results.

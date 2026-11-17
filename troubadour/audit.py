@@ -1,5 +1,5 @@
 """Audit available splits without generating or inspecting any missing test data."""
-from collections import Counter
+from collections import Counter, defaultdict
 import hashlib
 from itertools import combinations
 import json
@@ -27,6 +27,14 @@ def audit_rows(rows, allowed):
         assert signature not in signatures, 'Duplicate public prompt within a split'
         assert r['id'] not in ids, 'Duplicate episode ID within a split'
         signatures.add(signature);ids.add(r['id'])
+    groups=defaultdict(list)
+    for row in rows:
+        if row.get('contrast_group'):groups[row['contrast_group']].append(row)
+    for group in groups.values():
+        assert len(group) in (2,3), 'Incomplete paired-query group'
+        assert all(r['observations']==group[0]['observations'] and r['rule_mask']==group[0]['rule_mask'] for r in group)
+        assert len({r['query'] for r in group})==len(group)
+        assert {r['answer'] for r in group}==({'A','B'} if len(group)==2 else {'A','B','U'})
     return signatures, {'rows':len(rows),'unique_ids':len(ids),'duplicate_prompts':0,
                         'labels':dict(Counter(r['answer'] for r in rows))}
 

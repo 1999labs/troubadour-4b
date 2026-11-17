@@ -56,7 +56,9 @@ Use `troubadour.train`, not the raw MLX LoRA command, to apply the verified non-
 
 ## Controls and reporting
 
-Report raw Qwen, a development-fitted scalar adjustment to its uncertainty logit, a nearest-example heuristic, the trained model, and a matched training control. All claimed final comparisons use reserved societies. Uncertainty intervals are paired and clustered by complementary society pairs rather than treating correlated examples as independent.
+Report raw Qwen, a development-fitted scalar adjustment to its uncertainty logit, a nearest-example heuristic, the trained model, and a matched training control. All claimed final comparisons use reserved societies. The input-only baseline implementations are in `troubadour/baselines.py`. The nearest-example baseline finds every observation at minimum Hamming distance from the query and answers only when all of those neighbors agree; conflicting nearest labels yield U. The majority-label baseline ignores the query and returns U on a tied vote. The public-grammar solver is the exact reference upper bound.
+
+Uncertainty intervals are paired and clustered by complementary society pairs rather than treating correlated examples as independent.
 
 Zero examples make U trivially correct. Therefore learning curves emphasize justified resolution on a fixed cohort and show oracle-resolvable coverage, answerable accuracy, and unwarranted certainty separately. Do not interpret zero-shot U accuracy as successful convention learning.
 

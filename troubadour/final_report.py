@@ -7,6 +7,7 @@ from .analyze import compare,read
 from .calibrate import adjusted
 from .evaluate import summarize, BASE, REVISION
 from .template import renderer_sha256
+from .baselines import KINDS, score_rows
 
 
 def checked_predictions(path, data_path, adapter_sha=None):
@@ -17,6 +18,8 @@ def checked_predictions(path, data_path, adapter_sha=None):
     source_by_id={r['id']:r for r in data}
     if any(r['society_pair']!=source_by_id[r['episode_id']]['society_pair'] or r['family']!=source_by_id[r['episode_id']]['family'] for r in rows):
         raise ValueError('Changed society metadata: '+path)
+    if any(r.get('contrast_group')!=source_by_id[r['episode_id']].get('contrast_group') for r in rows):
+        raise ValueError('Changed contrast pairing: '+path)
     if any(r['expected']!=expected[r['episode_id']] or r['k']!=8 or r['style']!='table' for r in rows):
         raise ValueError('Wrong targets or evaluation condition: '+path)
     meta=json.loads(Path(path).with_suffix('.meta.json').read_text())
@@ -61,6 +64,10 @@ def main():
     if hashlib.sha256(Path('artifacts/base-calibration.json').read_bytes()).hexdigest()!=selection['base_calibration_sha256']:
         raise ValueError('Baseline calibration changed after selection')
     calibrated=compare(adjusted(base,calibration['uncertainty_logit_bias']),candidate)
+    calibrated_transfer=compare(adjusted(bt,calibration['uncertainty_logit_bias']),ct)
+    calibrated_contrast=compare(adjusted(bc,calibration['uncertainty_logit_bias']),cc)
+    controls={split:{kind:summarize(score_rows(read(path),kind)) for kind in KINDS} for split,path in [('primary','data/final.jsonl'),('transfer','data/final_transfer.jsonl'),('contrast','data/final_contrast.jsonl')]}
+    nearest_comparison=compare(score_rows(read('data/final.jsonl'),'nearest_example'),candidate)
     b,c=primary['base'],primary['candidate']
     checks={
         'raw_qwen_gain':c['accuracy']-b['accuracy']>=criteria['minimum_raw_qwen_gain'],
@@ -73,6 +80,8 @@ def main():
     result={'research_question':'Can post-training teach a model street smarts so that it can learn and apply unfamiliar social rules?',
             'selection':selection,'criteria':criteria,'checks':checks,'passes_primary_criteria':all(checks.values()),
             'primary':primary,'against_dev_calibrated_qwen':calibrated,'transfer':transfer,'opposite_query_stress':contrast,
+            'transfer_against_dev_calibrated_qwen':calibrated_transfer,'contrast_against_dev_calibrated_qwen':calibrated_contrast,
+            'nonparametric_baselines':controls,'candidate_vs_nearest_example':nearest_comparison,
             'interpretation':'Synthetic finite-grammar rule induction in social language; no claim of real-world social competence. Independent-seed and robustness results must be reported separately.'}
     Path(a.out).write_text(json.dumps(result,indent=2));print(json.dumps({'checks':checks,'passes':all(checks.values())},indent=2))
 
