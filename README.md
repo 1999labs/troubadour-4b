@@ -123,7 +123,7 @@ A split by rule identity does not by itself prove that a model learned a general
 
 ## Prepared counterfactual practice
 
-An optional training recipe asks different questions about the same observations, with A/B/U all represented in each group. It keeps six examples together and averages their gradients in one update. This prevents an observation-only guess from fitting the entire group. The main held-out benchmark stays unchanged. This recipe is prepared and has passed a small GPU compatibility check; no performance gain is claimed for it yet.
+An optional training recipe asks different questions about the same observations, with A/B/U all represented in each group. It keeps six examples together and averages their gradients in one update. This prevents an observation-only guess from fitting the entire group. The main held-out benchmark stays unchanged. The smaller two-layer pilot completed, but its best full development accuracy was 43.75% versus original Qwen 42.5%, with substantially worse uncertainty recall. The larger eight-layer configuration below remains unrun. No performance gain is claimed for it.
 
 ```bash
 python -m troubadour.build_counterfactual
