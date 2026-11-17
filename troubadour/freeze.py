@@ -5,6 +5,7 @@ from importlib.metadata import version
 import json
 from pathlib import Path
 import shutil
+import subprocess
 from datetime import datetime, timezone
 from .evaluate import BASE, REVISION
 from .template import renderer_sha256
@@ -37,6 +38,7 @@ def main():
     payload={
         'frozen_at':datetime.now(timezone.utc).isoformat(),
         'base':BASE,'base_revision':REVISION,'recipe':a.recipe,'seed':a.seed,
+        'selection_code_revision':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
         'checkpoint_microsteps':a.microsteps,'source_checkpoint':str(weights),
         'adapter_sha256':sha(weights),'adapter_config_sha256':sha(source/'adapter_config.json'),
         'training_config':a.config,'training_config_sha256':sha(a.config),
@@ -48,6 +50,9 @@ def main():
         'runtime_versions':{n:version(n) for n in ['mlx','mlx-lm','transformers']},
         'selection_reason':a.reason,
         'final_data_seen':False,
+        'secondary_diagnostics':{'learning_curve_first_n':60,'learning_curve_ks':[0,1,2,4,8],
+                                 'robustness_first_n':48,'robustness_styles':['prose','symbols'],
+                                 'scope':'Fixed prefixes of the reserved episode order; exploratory small-cohort diagnostics'},
     }
     dest=Path('artifacts/selected');dest.mkdir(exist_ok=True)
     shutil.copy2(weights,dest/'adapters.safetensors')
