@@ -1,0 +1,46 @@
+{
+  "frozen_at": "2026-11-17T08:58:58.379230+00:00",
+  "base": "mlx-community/Qwen3-4B-Instruct-2507-4bit",
+  "base_revision": "50d427756c6b1b2fe0c0a10f67fbda1fc8e82c1b",
+  "recipe": "choice-slow-seed17",
+  "seed": 17,
+  "selection_code_revision": "482939964db176068df106d2ae66924703cb8055",
+  "checkpoint_microsteps": 1200,
+  "source_checkpoint": "artifacts/slow-probe-1200/adapters.safetensors",
+  "adapter_sha256": "875c12bbecfed33888290b438a43a3f63c5f076bd0d16528018289dabdf3976c",
+  "adapter_config_sha256": "55c72bc1943e558708b93a987669b21002462ca0ce68fbcf250feb58f3a3b57e",
+  "training_config": "configs/choice-slow-seed17.yaml",
+  "training_config_sha256": "4e6831c4d753af179b7048823c3debb0474850e24d032262c316b647b567b0a8",
+  "training_data": "data/choice/train.jsonl",
+  "training_data_sha256": "f21e7cf04ed8da7a46ccf3aad980b61fa917661195ac08a20e24f38d467ed22d",
+  "split_sha256": "f07e2072e199729f4142c4221722d41cfff76b8689d677b1500a2341e77616d6",
+  "criteria_sha256": "ba6c3804c4dd9b66975824613d38d8fa36436712b5ff18be57f13fd8182b562b",
+  "base_calibration_sha256": "d3a4af0299bbbbd6856a846340accc38f6a7ed74b8c14a166bfe3979f43281b3",
+  "candidate_calibration_sha256": "0f64b70fd4fb3c057ee85a00b36248e907d5d0fffd39f7f0c9284ae9cae10944",
+  "development_predictions_sha256": "af73fd25cba94d36f17ba889c252577b497b7c747afaeccc01d9ffdc6c5ed019",
+  "renderer_sha256": "20488e4138d2c0ba7c895e707506dc7baa1887a274cf118d045c577dd1295b80",
+  "scoring_protocol": "constrained-choice-v4-reference",
+  "runtime_versions": {
+    "mlx": "0.32.4",
+    "mlx-lm": "0.32.2",
+    "transformers": "5.23.0"
+  },
+  "selection_reason": "None of the eight bounded v4 candidates met the mandatory IID development criteria. Under the recorded fallback rule, select the highest joint accuracy, then uncertainty recall, then earlier microstep. The long-run 1200 checkpoint tied balanced-rate 600 at 48.75% accuracy and won on uncertainty recall (21.25% versus 11.25%). Publish as an exploratory research checkpoint; do not claim validated improvement from development scores. No final encounters were generated or inspected.",
+  "final_data_seen": false,
+  "secondary_diagnostics": {
+    "learning_curve_first_n": 60,
+    "learning_curve_ks": [
+      0,
+      1,
+      2,
+      4,
+      8
+    ],
+    "robustness_first_n": 48,
+    "robustness_styles": [
+      "prose",
+      "symbols"
+    ],
+    "scope": "Fixed prefixes of the reserved episode order; exploratory small-cohort diagnostics"
+  }
+}

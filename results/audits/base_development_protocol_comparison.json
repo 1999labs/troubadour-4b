@@ -1,0 +1,8 @@
+{
+  "condition": "Full development, original Qwen, 240 eight-observation inputs",
+  "old_protocol": "historical optimized output projection",
+  "new_protocol": "constrained-choice-v4-reference",
+  "changed_predictions": 0,
+  "max_choice_probability_difference": 0.060546875,
+  "not_a_final_test": true
+}

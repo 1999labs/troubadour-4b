@@ -1,0 +1,20 @@
+{
+  "data": "data/dev.jsonl",
+  "out": "runs/base-dev240-v4.jsonl",
+  "adapter": null,
+  "limit": null,
+  "batch_size": 2,
+  "ks": "8",
+  "style": "table",
+  "activation_cache": true,
+  "protocol": "constrained-choice-v4-reference",
+  "renderer_sha256": "20488e4138d2c0ba7c895e707506dc7baa1887a274cf118d045c577dd1295b80",
+  "runtime_versions": {
+    "mlx": "0.32.4",
+    "mlx-lm": "0.32.2",
+    "transformers": "5.23.0"
+  },
+  "base": "mlx-community/Qwen3-4B-Instruct-2507-4bit",
+  "revision": "50d427756c6b1b2fe0c0a10f67fbda1fc8e82c1b",
+  "data_sha256": "f0f54f7c748c0280d0e62f9f98e4ed79149a8e4bced9f8c65f14f25360d167cf"
+}

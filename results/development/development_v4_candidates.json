@@ -1,0 +1,90 @@
+[
+  {
+    "name": "slow600-dev240-v4",
+    "adapter": "artifacts/slow-probe-600",
+    "recipe": "choice-slow-seed17",
+    "microsteps": 600,
+    "config": "configs/choice-slow-seed17.yaml",
+    "training_data": "data/choice/train.jsonl",
+    "accuracy": 0.42916666666666664,
+    "uncertainty_recall": 0.1625,
+    "iid_eligible": false
+  },
+  {
+    "name": "slow1200-dev240-v4",
+    "adapter": "artifacts/slow-probe-1200",
+    "recipe": "choice-slow-seed17",
+    "microsteps": 1200,
+    "config": "configs/choice-slow-seed17.yaml",
+    "training_data": "data/choice/train.jsonl",
+    "accuracy": 0.4875,
+    "uncertainty_recall": 0.2125,
+    "iid_eligible": false
+  },
+  {
+    "name": "slow2100-dev240-v4",
+    "adapter": "artifacts/slow-probe-2100",
+    "recipe": "choice-slow-seed17",
+    "microsteps": 2100,
+    "config": "configs/choice-slow-seed17.yaml",
+    "training_data": "data/choice/train.jsonl",
+    "accuracy": 0.48333333333333334,
+    "uncertainty_recall": 0.1125,
+    "iid_eligible": false
+  },
+  {
+    "name": "slow3000-dev240-v4",
+    "adapter": "artifacts/slow-probe-3000",
+    "recipe": "choice-slow-seed17",
+    "microsteps": 3000,
+    "config": "configs/choice-slow-seed17.yaml",
+    "training_data": "data/choice/train.jsonl",
+    "accuracy": 0.48333333333333334,
+    "uncertainty_recall": 0.0375,
+    "iid_eligible": false
+  },
+  {
+    "name": "counterfactual300-dev240-v4",
+    "adapter": "artifacts/counterfactual-probe-300",
+    "recipe": "counterfactual-small-seed17",
+    "microsteps": 300,
+    "config": "configs/counterfactual-small-seed17.yaml",
+    "training_data": "data/counterfactual/train.jsonl",
+    "accuracy": 0.4375,
+    "uncertainty_recall": 0.2375,
+    "iid_eligible": false
+  },
+  {
+    "name": "counterfactual600-dev240-v4",
+    "adapter": "artifacts/counterfactual-probe-600",
+    "recipe": "counterfactual-small-seed17",
+    "microsteps": 600,
+    "config": "configs/counterfactual-small-seed17.yaml",
+    "training_data": "data/counterfactual/train.jsonl",
+    "accuracy": 0.4166666666666667,
+    "uncertainty_recall": 0.2125,
+    "iid_eligible": false
+  },
+  {
+    "name": "balanced300-dev240-v4",
+    "adapter": "artifacts/balanced-rate-probe-300",
+    "recipe": "balanced-rate-seed17",
+    "microsteps": 300,
+    "config": "configs/balanced-rate-seed17.yaml",
+    "training_data": "data/choice/train.jsonl",
+    "accuracy": 0.48333333333333334,
+    "uncertainty_recall": 0.025,
+    "iid_eligible": false
+  },
+  {
+    "name": "balanced600-dev240-v4",
+    "adapter": "artifacts/balanced-rate-probe-600",
+    "recipe": "balanced-rate-seed17",
+    "microsteps": 600,
+    "config": "configs/balanced-rate-seed17.yaml",
+    "training_data": "data/choice/train.jsonl",
+    "accuracy": 0.4875,
+    "uncertainty_recall": 0.1125,
+    "iid_eligible": false
+  }
+]
