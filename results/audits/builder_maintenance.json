@@ -1,0 +1,15 @@
+{
+  "training_and_development_bytes_unchanged": [
+    "train_episodes.jsonl",
+    "dev.jsonl",
+    "dev_transfer.jsonl",
+    "sft/train.jsonl",
+    "sft/valid.jsonl",
+    "split_manifest.json"
+  ],
+  "answer_key_control_rows": {
+    "train": 5502,
+    "valid": 64
+  },
+  "final_data_generated": false
+}

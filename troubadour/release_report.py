@@ -11,8 +11,8 @@ def percent(value):
 def render(result, curves, robustness, smoke):
     primary=result['primary']; b=primary['base']; c=primary['candidate']
     passed=result['passes_primary_criteria']
-    outcome=('The selected checkpoint met all six preregistered primary criteria on this reserved test.' if passed else
-             'The selected checkpoint did not meet all six preregistered primary criteria. This is a research checkpoint, not a validated improvement in street smarts.')
+    outcome=('The selected checkpoint met all six predeclared primary criteria on this reserved test.' if passed else
+             'The selected checkpoint did not meet all six predeclared primary criteria. This is a research checkpoint, not a validated improvement in street smarts.')
     text=f"# Troubadour-Bench results\n\n{outcome}\n\n"
     text+='**Can post-training teach a model street smarts so that it can learn and apply unfamiliar social rules?**\n\n'
     text+='Here, street smarts means inferring fictional conventions from examples and recognizing when the evidence does not determine an answer. These results concern a finite Boolean rule system expressed in social language. They do not establish real-world cultural competence.\n\n'

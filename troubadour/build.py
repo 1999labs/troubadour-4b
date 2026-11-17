@@ -52,8 +52,16 @@ def main():
     rng.shuffle(train)
     write_jsonl(root/'sft/train.jsonl',({'messages':messages(r)} for r in train))
     write_jsonl(root/'sft/valid.jsonl',({'messages':messages(r)} for r in dev[:64]))
-    write_jsonl(root/'control/train.jsonl',({'messages':messages(r,explicit_rule=True)} for r in train))
-    write_jsonl(root/'control/valid.jsonl',({'messages':messages(r,explicit_rule=True)} for r in dev[:64]))
+    # An explicit hidden rule would contradict U targets. The prospective
+    # format control instead reveals the correct decision, including U.
+    for split, examples in [('train', train), ('valid', dev[:64])]:
+        control=[]
+        for row in examples:
+            item=messages(row)
+            item[0]['content']+=' In this training exercise, a certified answer key is supplied. Copy it exactly.'
+            item[1]['content']+='\nCertified answer key: '+row['answer']
+            control.append({'messages':item})
+        write_jsonl(root/'format_control'/f'{split}.jsonl',control)
     report={'grammar_rules':len(rules()),'society_pairs':{k:len(v) for k,v in manifest.items() if isinstance(v,list)},'rows':{'train':len(train),'dev':len(dev),'dev_transfer':len(transfer)},'train_labels':dict(Counter(r['answer'] for r in train)),'dev_labels':dict(Counter(r['answer'] for r in dev))}
     (root/'audit.json').write_text(json.dumps(report,indent=2));print(json.dumps(report,indent=2))
 
