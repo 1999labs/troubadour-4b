@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 from .analyze import compare,read
 from .calibrate import adjusted
-from .evaluate import summarize
+from .evaluate import summarize, BASE, REVISION
 from .template import renderer_sha256
 
 
@@ -14,9 +14,14 @@ def checked_predictions(path, data_path, adapter_sha=None):
     expected={r['id']:r['answer'] for r in data}
     if len(rows)!=len(expected) or {r['episode_id'] for r in rows}!=expected.keys():
         raise ValueError('Final report requires each reserved episode exactly once: '+path)
+    source_by_id={r['id']:r for r in data}
+    if any(r['society_pair']!=source_by_id[r['episode_id']]['society_pair'] or r['family']!=source_by_id[r['episode_id']]['family'] for r in rows):
+        raise ValueError('Changed society metadata: '+path)
     if any(r['expected']!=expected[r['episode_id']] or r['k']!=8 or r['style']!='table' for r in rows):
         raise ValueError('Wrong targets or evaluation condition: '+path)
     meta=json.loads(Path(path).with_suffix('.meta.json').read_text())
+    if meta.get('base')!=BASE or meta.get('revision')!=REVISION:
+        raise ValueError('Wrong base-model identity: '+path)
     if meta.get('protocol')!='constrained-choice-v3' or meta.get('renderer_sha256')!=renderer_sha256():
         raise ValueError('Unverified or changed prompt renderer: '+path)
     if meta['data_sha256']!=hashlib.sha256(Path(data_path).read_bytes()).hexdigest():

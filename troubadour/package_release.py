@@ -4,7 +4,6 @@ import hashlib
 import json
 from pathlib import Path
 import shutil
-from .worlds import messages
 
 
 def main():
@@ -16,6 +15,8 @@ def main():
     if checksum!=selection['adapter_sha256']:raise SystemExit('Adapter differs from frozen selection')
     if result.get('selection')!=selection:raise SystemExit('Results do not match frozen selection')
     files={'train':'train_episodes','train_choice':'choice_episodes','validation':'dev','validation_transfer':'dev_transfer','test':'final','test_transfer':'final_transfer','validation_contrast':'dev_contrast','test_contrast':'final_contrast'}
+    if Path('data/counterfactual_episodes.jsonl').exists():
+        files['train_counterfactual']='counterfactual_episodes'
     for f in files.values():
         if not Path('data',f+'.jsonl').exists():raise SystemExit('Missing dataset split '+f)
     from .dataset_export import to_hf_dataset
@@ -40,6 +41,8 @@ def main():
         shutil.copy2('SUCCESS_CRITERIA.json',dest/'SUCCESS_CRITERIA.json')
         shutil.copy2(a.results,dest/'RESULTS.json')
     source=Path(a.adapter)
+    if hashlib.sha256((source/'adapter_config.json').read_bytes()).hexdigest()!=selection['adapter_config_sha256']:
+        raise SystemExit('Adapter configuration differs from frozen selection')
     for name in ['adapters.safetensors','adapter_config.json']:
         shutil.copy2(source/name,model/'adapter'/name)
     shutil.copytree('troubadour',model/'troubadour',dirs_exist_ok=True,ignore=shutil.ignore_patterns('__pycache__'))
@@ -49,7 +52,7 @@ def main():
     example=json.loads(Path('data/dev.jsonl').read_text().splitlines()[2])
     (model/'example_episode.json').write_text(json.dumps({k:example[k] for k in ['observations','query']},indent=2))
     (model/'requirements.txt').write_text('mlx-lm==0.32.2\nhuggingface-hub==2.4.0\n')
-    integrity={str(p.relative_to(stage)):hashlib.sha256(p.read_bytes()).hexdigest() for p in stage.rglob('*') if p.is_file()}
+    integrity={str(p.relative_to(stage)):hashlib.sha256(p.read_bytes()).hexdigest() for folder in (dataset,model) for p in folder.rglob('*') if p.is_file()}
     (stage/'integrity.json').write_text(json.dumps(integrity,indent=2))
     print('Staged dataset/model files. Write and review model README, then verify fresh loading before publishing.')
 

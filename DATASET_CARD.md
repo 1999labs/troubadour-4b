@@ -47,3 +47,9 @@ License: Apache-2.0. Original synthetic data and generator; no real participant 
 The complete generated training split and the balanced `train_choice` subset are overlapping views, not independent data. `train_choice` contains 2,850 eight-observation episodes with 950 examples per A/B/U label. The selected model card identifies which recipe was actually used.
 
 Troubadour-Bench source and scoring documentation: https://github.com/1999labs/troubadour-4b. The model release: https://huggingface.co/noahmclaughlin/Troubadour-4B. Evaluation data is kept in separate test/transfer splits within this dataset; no separate evaluation dataset is required.
+
+## Counterfactual training view
+
+The optional `train_counterfactual` recipe contains 3,690 episodes in 615 consecutive groups of six. Within each group there are two A, two B and two U targets. In 492 groups, the same observations support three different query labels, paired with a complementary world. The other 123 groups retain ordinary balanced examples. Exactly 738 prompts overlap `train_choice` and the original training split; these are training views, not independent datasets. The grouped sampler preserves each complete six-example group. The model card identifies whether this recipe was actually used for the released checkpoint.
+
+The counterfactual training view reuses `contrast_group` for its three-query sets; ordinary rows have null values. The evaluation stress splits use this field for two opposing queries. All hidden rule metadata remains excluded from model inputs.
