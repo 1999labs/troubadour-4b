@@ -16,7 +16,7 @@ The full development set has240 episodes from40 complementary society pairs, wit
 
 An earlier generic SFT pilot was interrupted by a Metal GPU/display-context error after85 updates. Its saved update50 checkpoint answered U on all48 exploratory pilot questions. The cached model's original template also required an explicit correction: it inserted thinking markup in supervised completions but not the generation prefix. The corrected template preserves the original evaluation prefix. Failed attempts are disclosed rather than silently discarded.
 
-The next planned recipe starts from original Qwen, uses a much smaller learning rate and averages8 examples per optimizer update. It trains on the same balanced2,850-example choice subset for6,000 example presentations. This is still supervised LoRA training of the original model's answer logits, with no extra prediction head or reference-solver features at inference. See configs/choice-slow-seed17.yaml.
+The next planned recipe starts from original Qwen, uses a much smaller learning rate and averages8 examples per optimizer update. It trains on the same balanced2,850-example choice subset for6,000 example presentations. This is still supervised LoRA training of the original model's answer logits, with no extra prediction head or reference-solver features at inference. See configs/choice-slow-seed 17.yaml.
 
 Caching activations from the frozen lower28 layers makes repeated training passes cheaper. A GPU audit on two examples with nonzero pilot adapters found exactly matching probabilities, loss, and adapter gradients between cached and full computation. This is a numerical implementation check, not evidence of task improvement. The ordinary scorer also matched full-model scalar scoring on four audit examples. Seventeen unit tests cover rule generation, oracle agreement, complement splits, input leakage, scoring, and statistical summaries.
 
@@ -25,3 +25,9 @@ The opposite-query diagnostic has160 development episodes: two questions share t
 Final evaluation, independent seeds, matched training control, learning curves, rendering robustness, instruction smoke checks, and model publication remain pending. The source and dataset preview are useful for inspection and reproduction; their presence does not mean the research hypothesis has been established.
 
 A counterfactual practice recipe has been prepared and independently label-checked, but has not received a performance trial yet. Its3,690 examples form615 balanced groups; most groups require different answers to different questions about exactly the same observations. A three-microstep GPU smoke test of the grouped sampler completed successfully using two adapted layers. That smoke test verifies the code path only, not learning or generalization.
+
+## Full longer-run checkpoint 600 and counterfactual pilot
+
+At 600 microsteps (150 optimizer updates), full 240-question development accuracy is 44.17%, compared with raw Qwen 42.5%. Answerable accuracy 56.875% versus 26.25%; uncertainty recall 18.75% versus 75%. Conditional A/B accuracy 71.875% versus 66.25%, while uncertainty-ranking AUC remains weak at 0.522 versus 0.504. This does not meet the planned success standard. No final data has been generated.
+
+Before finishing the longer run, we temporarily preserve its optimizer state by suspending its process and test the prepared smaller counterfactual recipe: fresh base, last two blocks, rank 8, 600 microsteps/200 updates/1,200 example presentations, balanced six-example groups, seed 17. This is a different recipe, changing data, grouping and adapter depth together; it is not a clean single-factor ablation. The longer run resumes afterward. No success is claimed from training loss or compatibility checks.
