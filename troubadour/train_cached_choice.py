@@ -29,11 +29,15 @@ def bottom_hidden(model, tokens, split):
     return h
 
 
-def suffix_logits(model, hidden, lengths, split, label_ids):
+def suffix_logits(model, hidden, lengths, split, label_ids, full_projection=False):
     h = hidden
     mask = create_attention_mask(h, None)
     for layer in model.layers[split:]:
         h = layer(h, mask, None)
+    if full_projection:
+        normalized = model.model.norm(h)
+        logits = model.model.embed_tokens.as_linear(normalized) if model.args.tie_word_embeddings else model.lm_head(normalized)
+        return logits[mx.arange(h.shape[0]), lengths - 1][:, label_ids]
     last = model.model.norm(h)[mx.arange(h.shape[0]), lengths - 1]
     logits = model.model.embed_tokens.as_linear(last) if model.args.tie_word_embeddings else model.lm_head(last)
     return logits[:, label_ids]
@@ -42,7 +46,7 @@ def suffix_logits(model, hidden, lengths, split, label_ids):
 class ActivationCache:
     def __init__(self, model, split, directory='artifacts/frozen-cache'):
         self.model, self.split = model, split
-        identity = json.dumps({'revision': REVISION, 'split': split, 'template': TEMPLATE, 'mlx': version('mlx'), 'mlx_lm': version('mlx-lm'), 'cache_protocol': 1}, sort_keys=True)
+        identity = json.dumps({'revision': REVISION, 'split': split, 'template': TEMPLATE, 'mlx': version('mlx'), 'mlx_lm': version('mlx-lm'), 'cache_protocol': 2}, sort_keys=True)
         self.root = Path(directory) / hashlib.sha256(identity.encode()).hexdigest()[:20]
         self.root.mkdir(parents=True, exist_ok=True)
         (self.root / 'identity.json').write_text(identity)
@@ -55,17 +59,16 @@ class ActivationCache:
         paths = [self.root / (hashlib.sha256(json.dumps(p).encode()).hexdigest() + '.safetensors') for p in prefixes]
         values = [mx.load(str(p))['hidden'] if p.exists() else None for p in paths]
         missing = [i for i, v in enumerate(values) if v is None]
-        if missing:
-            width = max(len(prefixes[i]) for i in missing)
-            x = mx.array([prefixes[i] + [0] * (width-len(prefixes[i])) for i in missing])
-            computed = bottom_hidden(self.model, x, self.split)
+        # Canonical cache values must not depend on other inputs' lengths,
+        # batch composition, or which neighboring keys happened to be cached.
+        for i in missing:
+            computed = bottom_hidden(self.model, mx.array([prefixes[i]]), self.split)
             mx.eval(computed)
-            for j, i in enumerate(missing):
-                h = computed[j, :len(prefixes[i])]
-                temporary = paths[i].with_suffix('.partial.safetensors')
-                mx.save_safetensors(str(temporary), {'hidden': h})
-                temporary.replace(paths[i])
-                values[i] = h
+            h = computed[0]
+            temporary = paths[i].with_suffix('.partial.safetensors')
+            mx.save_safetensors(str(temporary), {'hidden': h})
+            temporary.replace(paths[i])
+            values[i] = h
         width = max(len(p) for p in prefixes)
         return mx.stack([mx.pad(h, [(0, width-h.shape[0]), (0, 0)]) for h in values])
 

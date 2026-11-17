@@ -27,7 +27,7 @@ def main():
         try:
             while child.poll() is None:
                 batt=power();payload.update({'power':batt,'elapsed_seconds':time.time()-start,'pid':child.pid,'updated':datetime.now(timezone.utc).isoformat()})
-                status.write_text(json.dumps(payload,indent=2))
+                temporary=status.with_suffix('.tmp');temporary.write_text(json.dumps(payload,indent=2));temporary.replace(status)
                 if batt['percent'] is not None and batt['percent']<=18 and batt['status'] not in ('charging','charged'):
                     child.send_signal(signal.SIGINT)
                     try:child.wait(timeout=30)
@@ -36,7 +36,7 @@ def main():
                 time.sleep(10)
             else:payload['status']='complete' if child.returncode==0 else 'failed'
             payload.update({'exit_code':child.poll(),'elapsed_seconds':time.time()-start})
-            status.write_text(json.dumps(payload,indent=2))
+            temporary=status.with_suffix('.tmp');temporary.write_text(json.dumps(payload,indent=2));temporary.replace(status)
         finally:
             if child.poll() is None:child.terminate()
             if awake.poll() is None:awake.terminate()

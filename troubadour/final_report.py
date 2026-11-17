@@ -25,7 +25,7 @@ def checked_predictions(path, data_path, adapter_sha=None):
     meta=json.loads(Path(path).with_suffix('.meta.json').read_text())
     if meta.get('base')!=BASE or meta.get('revision')!=REVISION:
         raise ValueError('Wrong base-model identity: '+path)
-    if meta.get('protocol')!='constrained-choice-v3' or meta.get('renderer_sha256')!=renderer_sha256():
+    if meta.get('protocol')!='constrained-choice-v4-reference' or meta.get('renderer_sha256')!=renderer_sha256():
         raise ValueError('Unverified or changed prompt renderer: '+path)
     if meta['data_sha256']!=hashlib.sha256(Path(data_path).read_bytes()).hexdigest():
         raise ValueError('Dataset checksum changed: '+path)

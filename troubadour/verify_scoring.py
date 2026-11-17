@@ -12,6 +12,7 @@ def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('--adapter')
     parser.add_argument('--mixed-prefixes',action='store_true')
+    parser.add_argument('--examples',type=int,default=4)
     parser.add_argument('--out',default='artifacts/scoring_parity.json')
     args=parser.parse_args()
     import mlx.core as mx
@@ -19,8 +20,8 @@ def main():
     mx.set_cache_limit(256*1024**2);mx.set_memory_limit(6*1024**3)
     model,tok=load(str(resolve_base_path()),adapter_path=args.adapter)
     configure_tokenizer(tok);model.freeze()
-    rows=[json.loads(line) for line in Path('data/dev.jsonl').read_text().splitlines()][:4]
-    ks=[0,1,4,8] if args.mixed_prefixes else [8]*4
+    rows=[json.loads(line) for line in Path('data/dev.jsonl').read_text().splitlines()][:args.examples]
+    ks=([0,1,4,8]*((len(rows)+3)//4))[:len(rows)] if args.mixed_prefixes else [8]*len(rows)
     inputs=[]
     for row,k in zip(rows,ks):
         episode=dict(row,observations=row['observations'][:k])
@@ -36,13 +37,13 @@ def main():
     cached=choice_probabilities(model,inputs,labels,ActivationCache(model,28))
     errors={}
     choices=lambda values:[max(range(3),key=row.__getitem__) for row in values]
-    for name,values in [('batched',actual),('cached',cached)]:
+    for name,values in [('canonical',actual),('cached',cached)]:
         errors[name]=max(abs(a-b) for x,y in zip(expected,values) for a,b in zip(x,y))
         assert errors[name]<1e-3,(name,errors[name],values,expected)
         assert choices(values)==choices(expected),(name,values,expected)
-    report={'adapter':args.adapter,'examples':4,'observation_counts':ks,'prompt_lengths':list(map(len,inputs)),
+    report={'adapter':args.adapter,'examples':len(rows),'observation_counts':ks,'prompt_lengths':list(map(len,inputs)),
             'probability_tolerance':1e-3,'max_probability_differences':errors,'same_predictions':True,
-            'scalar':expected,'batched':actual,'cached':cached}
+            'scalar':expected,'canonical':actual,'cached':cached}
     Path(args.out).write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report,indent=2))
 
 if __name__=='__main__':main()

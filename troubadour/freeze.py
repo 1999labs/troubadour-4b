@@ -46,6 +46,8 @@ def main():
     if any(r['expected']!=expected[r['episode_id']] or r['k']!=8 or r['style']!='table' for r in predictions):
         raise SystemExit('Development evaluation condition differs')
     meta=json.loads(Path(a.development_predictions).with_suffix('.meta.json').read_text())
+    if meta.get('protocol')!='constrained-choice-v4-reference':
+        raise SystemExit('Selection requires canonical reference scoring')
     if meta.get('base')!=BASE or meta.get('revision')!=REVISION or meta.get('renderer_sha256')!=renderer_sha256() or meta.get('data_sha256')!=sha('data/dev.jsonl'):
         raise SystemExit('Development scoring provenance differs')
     if meta.get('adapter_sha256')!=sha(weights):
@@ -69,6 +71,7 @@ def main():
         'candidate_calibration_sha256':sha('artifacts/candidate-calibration.json'),
         'development_predictions_sha256':sha(a.development_predictions),
         'renderer_sha256':renderer_sha256(),
+        'scoring_protocol':'constrained-choice-v4-reference',
         'runtime_versions':{n:version(n) for n in ['mlx','mlx-lm','transformers']},
         'selection_reason':a.reason,
         'final_data_seen':False,

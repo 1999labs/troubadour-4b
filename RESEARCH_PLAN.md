@@ -86,3 +86,13 @@ If none of the planned longer-run checkpoints meets the development standard, on
 ## Release calibration binding
 
 Before any final encounters are generated, the selection command now verifies the full development prediction file against the selected adapter and fits the previously specified U-bias grid to that file. Its hash is frozen alongside the baseline calibration. The final report applies both development-fitted biases unchanged as a secondary comparison. The unadjusted model and all primary criteria are unchanged. A report renderer is prepared to display measured test results and evidence curves; no final score exists yet.
+
+## Reference-scoring correction before final data
+
+A preselection mixed-prefix audit found a 0.007446 probability discrepancy between the shortened last-vector output projection and the scalar model's full output projection. Diagnosis isolated a BF16 output-logit difference (33.0 versus 33.25) on one label; padding was not the sole cause. Earlier same-length pilot audits had passed. The four audited decisions were unchanged, but that does not establish equivalence on every input.
+
+Primary and secondary release scoring now use protocol `constrained-choice-v4-reference`: each unpadded input is scored with the full output projection, matching `model(tokens)[0, -1]`. Optional frozen-prefix reuse follows the same full projection. Cache protocol 2 computes missing prefixes individually, so a cached value does not depend on other prompts' lengths or cache-hit patterns. The strict 0.001 audit tolerance was retained, not relaxed. Both base and the current adapter passed the four mixed-prefix audit with zero probability difference.
+
+All checkpoint selection comparisons and the development-fitted baseline/candidate U biases will be rerun using v4 before selection. Earlier v2/v3 scores remain historical development results and will not be mixed with v4 scores for selection or final claims. Candidate checkpoint bounds, training data, success thresholds, and reserved test allocation remain unchanged. The ongoing training process and its last-vector classification loss are unchanged; this corrects the release inference calculation rather than tuning against final data. Its training-cache equivalence audit remains a separate check of that training objective.
+
+The local cache migration reuses only known unpadded 320-token entries from this experiment; the three short entries created by the failed diagnostic are excluded. Larger full-prefix scoring and gradient audits must pass before migrated entries are used for corrected selection. Fresh public installations start with protocol-2 caches and do not need this migration.

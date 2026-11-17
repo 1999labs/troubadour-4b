@@ -39,7 +39,7 @@ The base is `mlx-community/Qwen3-4B-Instruct-2507-4bit`, pinned to revision `50d
 python -m troubadour.evaluate_batch --data data/dev.jsonl --out runs/base-dev.jsonl
 ```
 
-This uses the model's next-token probabilities restricted to A/B/U. Both base and adapted models use the exact same prompt and decoding. It is not unrestricted essay generation. The optimized batched scorer is checked against scalar full-model logits. Labels' normalized probabilities are not automatically calibrated confidence estimates.
+This uses the model's next-token probabilities restricted to A/B/U. Both base and adapted models use the exact same prompt and decoding. It is not unrestricted essay generation. Release protocol v4 scores one unpadded input at a time with the full output projection and checks optional frozen-prefix reuse against scalar full-model logits. Earlier development scores used a shortened projection; the recorded correction requires rerunning selection comparisons before the final test. Labels' normalized probabilities are not automatically calibrated confidence estimates.
 
 ## Train an adapter
 

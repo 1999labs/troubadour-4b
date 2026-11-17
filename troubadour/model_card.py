@@ -86,7 +86,7 @@ The dataset generator enumerates 612 unique Boolean conventions over five binary
 
 '''
     text+=f"Selected recipe: `{selection['recipe']}`. Seed: {selection['seed']}. Selected microstep: {selection['checkpoint_microsteps']}. See [selection.json](selection.json) for SHA-256 identities and the recorded selection reason. `final_data_seen: false` records the state at selection time; final evaluation was subsequently performed.\n\n"
-    text+='''Frozen lower-layer activations are cached during some training/evaluation runs to avoid recomputing unchanged work. This preserves the original model computation; it adds no oracle features and contains no future answer tokens. Full/cached probabilities and gradients were checked on small audit cases. The released predictor uses the full model with its adapter and does not need the activation cache.
+    text+='''Frozen lower-layer activations are cached during some training/evaluation runs to avoid recomputing unchanged work. This preserves the original model computation; it adds no oracle features and contains no future answer tokens. Full/cached inference probabilities and the separate training-objective gradients were checked on small audit cases. Release scoring uses protocol v4: one unpadded input and the full output projection. Earlier development scoring was corrected after a low-precision projection discrepancy, and selection was rerun before the reserved test. The released predictor uses the full model with its adapter and does not need the activation cache.
 
 Measured training durations and retained update/token counts are in [COMPUTE.md](COMPUTE.md). Memory limits are recorded as limits, not measured peaks.
 

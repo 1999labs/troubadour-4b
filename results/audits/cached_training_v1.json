@@ -1,0 +1,11 @@
+{
+  "inference_probabilities_exact": true,
+  "examples": 2,
+  "cached_frozen_layers": 28,
+  "max_probability_error": 0.0,
+  "full_loss": 1.2126320600509644,
+  "cached_loss": 1.2126320600509644,
+  "relative_gradient_l2_error": 0.0,
+  "cache_roundtrip_exact": true,
+  "future_answer_tokens_in_cache": false
+}
