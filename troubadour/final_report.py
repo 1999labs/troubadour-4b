@@ -63,6 +63,12 @@ def main():
     calibration=json.loads(Path('artifacts/base-calibration.json').read_text())
     if hashlib.sha256(Path('artifacts/base-calibration.json').read_bytes()).hexdigest()!=selection['base_calibration_sha256']:
         raise ValueError('Baseline calibration changed after selection')
+    candidate_calibration=json.loads(Path('artifacts/candidate-calibration.json').read_text())
+    if hashlib.sha256(Path('artifacts/candidate-calibration.json').read_bytes()).hexdigest()!=selection['candidate_calibration_sha256']:
+        raise ValueError('Candidate calibration changed after selection')
+    if candidate_calibration['adapter_sha256']!=sha:
+        raise ValueError('Candidate calibration belongs to different weights')
+    candidate_adjusted={name:compare(adjusted(b,calibration['uncertainty_logit_bias']),adjusted(c,candidate_calibration['uncertainty_logit_bias'])) for name,b,c in [('primary',base,candidate),('transfer',bt,ct),('contrast',bc,cc)]}
     calibrated=compare(adjusted(base,calibration['uncertainty_logit_bias']),candidate)
     calibrated_transfer=compare(adjusted(bt,calibration['uncertainty_logit_bias']),ct)
     calibrated_contrast=compare(adjusted(bc,calibration['uncertainty_logit_bias']),cc)
@@ -81,6 +87,8 @@ def main():
             'selection':selection,'criteria':criteria,'checks':checks,'passes_primary_criteria':all(checks.values()),
             'primary':primary,'against_dev_calibrated_qwen':calibrated,'transfer':transfer,'opposite_query_stress':contrast,
             'transfer_against_dev_calibrated_qwen':calibrated_transfer,'contrast_against_dev_calibrated_qwen':calibrated_contrast,
+            'secondary_both_dev_calibrated':candidate_adjusted,
+            'calibration_biases':{'base':calibration['uncertainty_logit_bias'],'candidate':candidate_calibration['uncertainty_logit_bias'],'fit_on':'development only; primary model remains unadjusted'},
             'nonparametric_baselines':controls,'candidate_vs_nearest_example':nearest_comparison,
             'interpretation':'Synthetic finite-grammar rule induction in social language; no claim of real-world social competence. Independent-seed and robustness results must be reported separately.'}
     Path(a.out).write_text(json.dumps(result,indent=2));print(json.dumps({'checks':checks,'passes':all(checks.values())},indent=2))

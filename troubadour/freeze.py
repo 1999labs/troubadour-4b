@@ -25,6 +25,7 @@ def main():
     p.add_argument('--microsteps',type=int,required=True)
     p.add_argument('--seed',type=int,default=17)
     p.add_argument('--reason',required=True)
+    p.add_argument('--development-predictions',required=True)
     a=p.parse_args()
     selection=Path('artifacts/selection.json')
     if selection.exists():raise SystemExit('Selection is already frozen; do not retune against reserved tests')
@@ -34,6 +35,25 @@ def main():
     if a.seed!=criteria['published_seed_preselected']:
         raise SystemExit('Release seed differs from the prospectively selected seed')
     source=Path(a.adapter);weights=source/a.checkpoint
+    # Fit only the selected checkpoint's full development predictions.
+    from .analyze import read
+    from .calibrate import fit
+    predictions=read(a.development_predictions)
+    development=read('data/dev.jsonl')
+    expected={r['id']:r['answer'] for r in development}
+    if len(predictions)!=len(expected) or {r['episode_id'] for r in predictions}!=expected.keys():
+        raise SystemExit('Selection requires the complete development evaluation')
+    if any(r['expected']!=expected[r['episode_id']] or r['k']!=8 or r['style']!='table' for r in predictions):
+        raise SystemExit('Development evaluation condition differs')
+    meta=json.loads(Path(a.development_predictions).with_suffix('.meta.json').read_text())
+    if meta.get('base')!=BASE or meta.get('revision')!=REVISION or meta.get('renderer_sha256')!=renderer_sha256() or meta.get('data_sha256')!=sha('data/dev.jsonl'):
+        raise SystemExit('Development scoring provenance differs')
+    if meta.get('adapter_sha256')!=sha(weights):
+        raise SystemExit('Development predictions do not match selected weights')
+    calibration=fit(predictions)
+    calibration['development_predictions_sha256']=sha(a.development_predictions)
+    calibration['adapter_sha256']=sha(weights)
+    Path('artifacts/candidate-calibration.json').write_text(json.dumps(calibration,indent=2)+'\n')
     split=json.loads(Path('data/split_manifest.json').read_text())
     payload={
         'frozen_at':datetime.now(timezone.utc).isoformat(),
@@ -46,6 +66,8 @@ def main():
         'split_sha256':hashlib.sha256(json.dumps(split,sort_keys=True).encode()).hexdigest(),
         'criteria_sha256':sha('SUCCESS_CRITERIA.json'),
         'base_calibration_sha256':sha('artifacts/base-calibration.json'),
+        'candidate_calibration_sha256':sha('artifacts/candidate-calibration.json'),
+        'development_predictions_sha256':sha(a.development_predictions),
         'renderer_sha256':renderer_sha256(),
         'runtime_versions':{n:version(n) for n in ['mlx','mlx-lm','transformers']},
         'selection_reason':a.reason,

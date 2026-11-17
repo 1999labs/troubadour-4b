@@ -38,6 +38,8 @@ def main():
         shutil.copy2('RESEARCH_PLAN.md',dest/'RESEARCH_PLAN.md')
         shutil.copy2('EXPERIMENT_LOG.md',dest/'EXPERIMENT_LOG.md')
         shutil.copy2('artifacts/selection.json',dest/'selection.json')
+        for filename in ['base-calibration.json','candidate-calibration.json']:
+            shutil.copy2(Path('artifacts')/filename,dest/filename)
         shutil.copy2('data/split_manifest.json',dest/'split_manifest.json')
         shutil.copy2('SUCCESS_CRITERIA.json',dest/'SUCCESS_CRITERIA.json')
         shutil.copy2(a.results,dest/'RESULTS.json')
