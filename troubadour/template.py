@@ -8,3 +8,11 @@ def configure_tokenizer(tokenizer):
     target=wrapped if callable(getattr(wrapped,'apply_chat_template',None)) else tokenizer
     target.chat_template=TEMPLATE
     return tokenizer
+
+
+def renderer_sha256():
+    """Bind evaluation output to the exact renderer and chat-template source."""
+    import hashlib
+    root=Path(__file__).parent
+    payload=b'\0'.join((root/name).read_bytes() for name in ['worlds.py','template.py','chat_template.jinja'])
+    return hashlib.sha256(payload).hexdigest()

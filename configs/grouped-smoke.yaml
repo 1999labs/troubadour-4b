@@ -1,0 +1,22 @@
+model: mlx-community/Qwen3-4B-Instruct-2507-4bit
+train: true
+fine_tune_type: lora
+data: data/counterfactual
+seed: 17
+num_layers: 2
+batch_size: 2
+grad_accumulation_steps: 3
+iters: 3
+val_batches: 1
+learning_rate: 0.000005
+steps_per_report: 3
+steps_per_eval: 3
+save_every: 3
+adapter_path: artifacts/grouped-smoke
+max_seq_length: 512
+grad_checkpoint: true
+mask_prompt: true
+lora_parameters:
+  rank: 8
+  dropout: 0.0
+  scale: 16.0

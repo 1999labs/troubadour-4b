@@ -16,7 +16,7 @@ The task is deliberately bounded. It is not evidence about real cultures, consci
 
 ## Setup on Apple silicon
 
-Use Python 3.11 or newer, with sufficient memory and working power for training. The development machine has 16 GiB unified memory.
+Use Python 3.11 or newer, with sufficient memory and working power for training. The development machine is an Apple M2 with 16 GiB unified memory.
 
 ```bash
 python3 -m venv .venv
@@ -70,7 +70,9 @@ The demo runs locally. Random demo worlds can overlap training rules and are not
 
 ## Related work
 
-This project builds on the questions studied in [MetaICL](https://aclanthology.org/2022.naacl-main.201/), [Symbol Tuning](https://arxiv.org/abs/2305.08298), and [Larger language models do in-context learning differently](https://arxiv.org/abs/2303.03846). It does not claim to invent learning-to-learn or synthetic rule-induction benchmarks.
+[MetaICL](https://aclanthology.org/2022.naacl-main.201/) motivates training across tasks so that a model can learn a new task from examples without changing its weights during inference. [Symbol Tuning](https://arxiv.org/abs/2305.08298) and [Larger language models do in-context learning differently](https://arxiv.org/abs/2303.03846) motivate controls for label meanings and reliance on examples. [Garg et al.](https://arxiv.org/abs/2208.01066) study learning function classes in context with synthetic tasks.
+
+Here we use fictional social language, exact underdetermination labels, paired queries, and a local small-adapter experiment. The project does not claim to invent learning-to-learn or synthetic rule induction. Scores apply only to this task and protocol.
 
 ## License
 
@@ -112,3 +114,17 @@ python -m troubadour.run_job --name choice-slow-seed17 -- \
 ```
 
 This recipe processes6,000 examples with8 examples averaged per optimizer update. It is still under development. Checkpoints are saved every50 microsteps; no result is promised by running this command. The cache is disposable and can occupy approximately5GB. Neither the base weights nor the model architecture change when caching is enabled.
+
+A split by rule identity does not by itself prove that a model learned a general algorithm. It may learn a shortcut that transfers across related Boolean rules. Opposite-query checks, complementary worlds, evidence curves and alternative renderings help test those explanations; they do not establish a neural mechanism.
+
+## Prepared counterfactual practice
+
+An optional training recipe asks different questions about the same observations, with A/B/U all represented in each group. It keeps six examples together and averages their gradients in one update. This prevents an observation-only guess from fitting the entire group. The main held-out benchmark stays unchanged. This recipe is prepared and has passed a small GPU compatibility check; no performance gain is claimed for it yet.
+
+```bash
+python -m troubadour.build_counterfactual
+python -m troubadour.run_job --name counterfactual-seed17 -- \
+  .venv/bin/python -m troubadour.train_grouped_choice --config configs/counterfactual-seed17.yaml
+```
+
+Do not shuffle individual rows before the grouped sampler: the generated JSONL preserves complete six-example groups. A smaller two-layer pilot configuration is also provided for development.

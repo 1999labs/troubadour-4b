@@ -15,7 +15,9 @@ def main():
     source=Path(a.data);data=[json.loads(l) for l in source.read_text().splitlines()]
     if a.limit:data=data[:a.limit]
     ks=[int(k) for k in a.ks.split(',')]
-    cfg={k:v for k,v in vars(a).items() if k!='activation_cache' or v}|{'protocol':'constrained-choice-v2','base':BASE,'revision':REVISION,'data_sha256':hashlib.sha256(source.read_bytes()).hexdigest()}
+    from .template import renderer_sha256
+    from importlib.metadata import version
+    cfg={k:v for k,v in vars(a).items() if k!='activation_cache' or v}|{'protocol':'constrained-choice-v3','renderer_sha256':renderer_sha256(),'runtime_versions':{n:version(n) for n in ['mlx','mlx-lm','transformers']},'base':BASE,'revision':REVISION,'data_sha256':hashlib.sha256(source.read_bytes()).hexdigest()}
     if a.adapter:cfg['adapter_sha256']=hashlib.sha256((Path(a.adapter)/'adapters.safetensors').read_bytes()).hexdigest()
     meta=out.with_suffix('.meta.json')
     if meta.exists() and json.loads(meta.read_text())!=cfg:raise ValueError('Use a different output file after changing configuration')

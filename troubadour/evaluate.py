@@ -4,6 +4,7 @@ import argparse
 from collections import Counter, defaultdict
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import re
@@ -27,6 +28,26 @@ def parse_answer(text):
     return text if text in ('A','B','U') else 'INVALID'
 
 
+
+def uncertainty_auc(rows):
+    """Rank U versus determinate cases, invariant to a global U-logit shift."""
+    if not rows or any('label_probs' not in r for r in rows):return None
+    scored=[]
+    for r in rows:
+        p=r['label_probs']
+        margin=math.log(max(p['U'],1e-30))-math.log(max(p['A'],p['B'],1e-30))
+        scored.append((margin,int(r['expected']=='U')))
+    scored.sort();positive=sum(y for _,y in scored);negative=len(scored)-positive
+    if not positive or not negative:return None
+    rank_sum=0.0;i=0
+    while i<len(scored):
+        j=i+1
+        while j<len(scored) and scored[j][0]==scored[i][0]:j+=1
+        rank_sum+=sum(y for _,y in scored[i:j])*((i+1+j)/2)
+        i=j
+    return (rank_sum-positive*(positive+1)/2)/(positive*negative)
+
+
 def summarize(rows):
     if not rows:return {}
     counts=Counter(r['expected'] for r in rows)
@@ -34,6 +55,7 @@ def summarize(rows):
     bypair=defaultdict(list)
     for r in rows:bypair[r['episode_id'].removesuffix('-reverse')+'-'+str(r['k'])].append(r)
     pairs=[v for v in bypair.values() if len(v)==2]
+    answerable_pairs=[p for p in pairs if all(r['expected']!='U' for r in p)]
     contrast=defaultdict(list)
     for r in rows:
         if r.get('contrast_group'):contrast[r['contrast_group']].append(r)
@@ -43,9 +65,12 @@ def summarize(rows):
     return {'n':len(rows),'accuracy':sum(r['prediction']==r['expected'] for r in rows)/len(rows),
         'balanced_accuracy':sum(correct[c]/counts[c] for c in counts)/len(counts),
         'answerable_accuracy':sum(r['prediction']==r['expected'] for r in answerable)/len(answerable) if answerable else None,
+        'conditional_AB_accuracy':sum(max('AB',key=lambda c:r['label_probs'][c])==r['expected'] for r in answerable)/len(answerable) if answerable and all('label_probs' in r for r in answerable) else None,
+        'uncertainty_ranking_auc':uncertainty_auc(rows),
         'uncertainty_recall':correct['U']/counts['U'] if counts['U'] else None,
         'uncertainty_precision':sum(r['expected']=='U' for r in unknown)/len(unknown) if unknown else None,
         'paired_both_correct':sum(all(r['prediction']==r['expected'] for r in p) for p in pairs)/len(pairs) if pairs else None,
+        'paired_answerable_both_correct':sum(all(r['prediction']==r['expected'] for r in p) for p in answerable_pairs)/len(answerable_pairs) if answerable_pairs else None,
         'contrast_both_queries_correct':sum(all(r['prediction']==r['expected'] for r in pair) for pair in contrast_pairs)/len(contrast_pairs) if contrast_pairs else None,
         'invalid':sum(r['prediction']=='INVALID' for r in rows),
         'expected_counts':dict(counts),'prediction_counts':dict(Counter(r['prediction'] for r in rows)),

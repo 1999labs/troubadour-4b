@@ -1,0 +1,30 @@
+adapter_path: artifacts/counterfactual-small-seed17
+batch_size: 2
+data: data/counterfactual
+fine_tune_type: lora
+grad_accumulation_steps: 3
+grad_checkpoint: true
+iters: 600
+learning_rate: 5.0e-06
+lora_parameters:
+  dropout: 0.0
+  rank: 8
+  scale: 16.0
+lr_schedule:
+  arguments:
+  - 5.0e-06
+  - 174
+  - 1.0e-06
+  name: cosine_decay
+  warmup: 25
+  warmup_init: 1.0e-07
+mask_prompt: true
+max_seq_length: 512
+model: mlx-community/Qwen3-4B-Instruct-2507-4bit
+num_layers: 2
+save_every: 75
+seed: 17
+steps_per_eval: 300
+steps_per_report: 20
+train: true
+val_batches: -1

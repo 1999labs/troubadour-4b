@@ -6,6 +6,7 @@ from pathlib import Path
 from .analyze import compare,read
 from .calibrate import adjusted
 from .evaluate import summarize
+from .template import renderer_sha256
 
 
 def checked_predictions(path, data_path, adapter_sha=None):
@@ -16,6 +17,8 @@ def checked_predictions(path, data_path, adapter_sha=None):
     if any(r['expected']!=expected[r['episode_id']] or r['k']!=8 or r['style']!='table' for r in rows):
         raise ValueError('Wrong targets or evaluation condition: '+path)
     meta=json.loads(Path(path).with_suffix('.meta.json').read_text())
+    if meta.get('protocol')!='constrained-choice-v3' or meta.get('renderer_sha256')!=renderer_sha256():
+        raise ValueError('Unverified or changed prompt renderer: '+path)
     if meta['data_sha256']!=hashlib.sha256(Path(data_path).read_bytes()).hexdigest():
         raise ValueError('Dataset checksum changed: '+path)
     if adapter_sha and meta.get('adapter_sha256')!=adapter_sha:
@@ -32,9 +35,13 @@ def main():
     p.add_argument('--out',default='artifacts/final_results.json');a=p.parse_args()
     selection=json.loads(Path('artifacts/selection.json').read_text())
     sha=selection['adapter_sha256']
+    if selection.get('renderer_sha256')!=renderer_sha256():raise ValueError('Renderer changed after model selection')
     criteria=json.loads(Path('SUCCESS_CRITERIA.json').read_text())
     if hashlib.sha256(Path('SUCCESS_CRITERIA.json').read_bytes()).hexdigest()!=selection['criteria_sha256']:
         raise ValueError('Success criteria changed after selection')
+    for prediction_path in [a.base,a.candidate,a.base_transfer,a.candidate_transfer,a.base_contrast,a.candidate_contrast]:
+        meta=json.loads(Path(prediction_path).with_suffix('.meta.json').read_text())
+        if meta.get('runtime_versions')!=selection.get('runtime_versions'):raise ValueError('Runtime differs from frozen selection: '+prediction_path)
     data=json.loads(Path('data/split_manifest.json').read_text())
     if hashlib.sha256(json.dumps(data,sort_keys=True).encode()).hexdigest()!=selection['split_sha256']:
         raise ValueError('Society allocation changed after selection')
